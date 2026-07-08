@@ -3,215 +3,150 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>M/M/s Queueing Calculator — Mart Cashier Optimization</title>
+<title>Queueing Theory — Mart Cashier Optimization</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
-  font-family:'Inter',-apple-system,sans-serif;
-  background:#f1f5f9;color:#0f172a;line-height:1.6;
-  background-image:radial-gradient(circle at 0% 0%, rgba(233,69,96,0.03) 0%, transparent 50%),
-                   radial-gradient(circle at 100% 100%, rgba(15,52,96,0.04) 0%, transparent 50%);
-  min-height:100vh
+  font-family:'Inter',sans-serif;background:#f1f5f9;color:#0f172a;line-height:1.6;
+  background-image:radial-gradient(circle at 0% 0%,rgba(233,69,96,0.03) 0%,transparent 50%),
+                   radial-gradient(circle at 100% 100%,rgba(15,52,96,0.04) 0%,transparent 50%)
 }
 :root{
-  --primary:#0f172a;--secondary:#1e293b;--accent:#e94560;
-  --blue:#0f3460;--green:#10b981;--amber:#f59e0b;
-  --green-l:#d1fae5;--red-l:#fee2e2;--blue-l:#dbeafe;--amber-l:#fef3c7;
-  --g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;--g300:#cbd5e1;
-  --g400:#94a3b8;--g500:#64748b;--g600:#475569;
-  --shadow:0 1px 3px rgba(0,0,0,0.06);
-  --shadow-md:0 4px 6px -1px rgba(0,0,0,0.07);
-  --shadow-lg:0 10px 40px rgba(0,0,0,0.08);
-  --radius:20px;--radius-sm:12px
+  --p:#0f172a;--s:#1e293b;--a:#e94560;--b:#0f3460;--g:#10b981;--am:#f59e0b;
+  --gl:#d1fae5;--rl:#fee2e2;--bl:#dbeafe;--al:#fef3c7;
+  --g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;--g300:#cbd5e1;--g400:#94a3b8;--g500:#64748b;--g600:#475569;
+  --shadow:0 1px 3px rgba(0,0,0,0.06);--shadow-md:0 4px 6px -1px rgba(0,0,0,0.07);--shadow-lg:0 10px 40px rgba(0,0,0,0.08);
+  --r:20px;--rs:12px
 }
-
 nav{
   background:rgba(15,23,42,0.95);backdrop-filter:blur(12px);
   padding:0 2rem;display:flex;align-items:center;gap:0.25rem;
-  position:sticky;top:0;z-index:1000;height:64px;
-  border-bottom:1px solid rgba(255,255,255,0.06)
+  position:sticky;top:0;z-index:1000;height:64px;border-bottom:1px solid rgba(255,255,255,0.06)
 }
-nav .logo{
-  color:#fff;font-weight:800;font-size:1rem;display:flex;
-  align-items:center;gap:0.55rem;margin-right:auto;letter-spacing:-0.02em
-}
+nav .logo{color:#fff;font-weight:800;font-size:1rem;display:flex;align-items:center;gap:0.5rem;margin-right:auto;letter-spacing:-0.02em}
 nav .logo svg{flex-shrink:0}
-nav a{
-  color:#64748b;text-decoration:none;font-size:0.78rem;font-weight:500;
-  padding:0.4rem 1.1rem;border-radius:8px;transition:all 0.2s
-}
+nav a{color:#64748b;text-decoration:none;font-size:0.78rem;font-weight:500;padding:0.4rem 1rem;border-radius:8px;transition:all 0.2s}
 nav a:hover{color:#fff;background:rgba(255,255,255,0.08)}
-nav a.active{color:#fff;background:var(--accent)}
+nav a.active{color:#fff;background:var(--a)}
 
 .hero{
   background:linear-gradient(135deg,#0f172a 0%,#1e293b 50%,#0f3460 100%);
-  color:#fff;padding:3.5rem 2rem 4rem;text-align:center;position:relative;overflow:hidden
+  color:#fff;padding:3.5rem 2rem 4.5rem;text-align:center;position:relative;overflow:hidden
 }
-.hero::after{
-  content:'';position:absolute;bottom:0;left:0;right:0;
-  height:60px;background:#f1f5f9;border-radius:50% 50% 0 0/100% 100% 0 0
-}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:60px;background:#f1f5f9;border-radius:50% 50% 0 0/100% 100% 0 0}
 .hero-content{position:relative;z-index:2}
-.hero h1{font-size:2.4rem;font-weight:900;margin-bottom:0.5rem;line-height:1.1;letter-spacing:-0.03em}
-.hero h1 span{background:linear-gradient(135deg,var(--accent),#fb7185);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero p{font-size:0.95rem;color:#94a3b8;max-width:550px;margin:0 auto 1.2rem;line-height:1.7}
-.hero-tags{display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap}
-.hero-tags span{
+.hero h1{font-size:2.5rem;font-weight:900;margin-bottom:0.5rem;line-height:1.1;letter-spacing:-0.03em}
+.hero h1 span{background:linear-gradient(135deg,var(--a),#fb7185);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:1rem;color:#94a3b8;max-width:600px;margin:0 auto 1.2rem;line-height:1.7}
+.hero-days{display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap}
+.hero-days span{
   background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);
-  padding:0.3rem 0.9rem;border-radius:20px;font-size:0.68rem;font-weight:600;color:#94a3b8
+  padding:0.35rem 1rem;border-radius:20px;font-size:0.72rem;font-weight:600
 }
+.hero-days .sun{color:#fb7185}
+.hero-days .fri{color:#60a5fa}
 
-.container{max-width:1100px;margin:-3.5rem auto 0;padding:0 1.5rem 3rem;position:relative;z-index:2}
+.container{max-width:1120px;margin:-3.5rem auto 0;padding:0 1.5rem 3rem;position:relative;z-index:2}
 
-/* STRUCTURE IMAGE */
-.struct-card{
-  background:#fff;border-radius:var(--radius);padding:1.5rem;
-  box-shadow:var(--shadow-lg);border:1px solid var(--g200);margin-bottom:1.5rem;text-align:center
-}
-.struct-card h3{font-size:1rem;font-weight:700;margin-bottom:0.75rem;color:var(--primary)}
-.struct-card img{
-  max-width:100%;height:auto;border-radius:var(--radius-sm);
-  border:1px solid var(--g200);box-shadow:var(--shadow)
-}
-.struct-card .legend{
-  display:flex;gap:1.5rem;justify-content:center;margin-top:0.75rem;
-  flex-wrap:wrap;font-size:0.78rem;color:var(--g500)
-}
-.struct-card .legend span{padding:0.2rem 0.8rem;border-radius:6px;font-weight:500}
+/* STRUCTURE */
+.struct-card{background:#fff;border-radius:var(--r);padding:1.5rem;box-shadow:var(--shadow-lg);border:1px solid var(--g200);margin-bottom:1.5rem;text-align:center}
+.struct-card h3{font-size:1rem;font-weight:700;margin-bottom:0.75rem;color:var(--p)}
+.struct-card img{max-width:100%;height:auto;border-radius:var(--rs);border:1px solid var(--g200);box-shadow:var(--shadow)}
+
+/* DAY TOGGLE */
+.day-tabs{display:flex;gap:0;margin-bottom:1.5rem;border-radius:var(--rs);overflow:hidden;border:2px solid var(--g200);background:#fff}
+.day-tab{flex:1;padding:0.85rem;text-align:center;font-weight:700;font-size:0.85rem;cursor:pointer;transition:all 0.2s;border:none;background:transparent;color:var(--g500)}
+.day-tab.active{background:var(--p);color:#fff}
+.day-tab .sub{font-weight:400;font-size:0.7rem;opacity:0.7;display:block;margin-top:0.1rem}
+.day-panel{display:none}
+.day-panel.active{display:block}
 
 /* INPUT PANEL */
-.input-panel{
-  background:#fff;border-radius:var(--radius);padding:1.75rem;
-  box-shadow:var(--shadow-lg);border:1px solid var(--g200);margin-bottom:1.5rem
-}
-.input-panel h3{font-size:1.05rem;font-weight:700;margin-bottom:1.25rem;display:flex;align-items:center;gap:0.5rem}
-.input-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem}
-@media(max-width:900px){.input-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:600px){.input-grid{grid-template-columns:1fr}}
+.input-panel{background:#fff;border-radius:var(--r);padding:1.5rem;box-shadow:var(--shadow-md);border:1px solid var(--g200);margin-bottom:1.5rem}
+.input-panel h3{font-size:1rem;font-weight:700;margin-bottom:1rem}
+.input-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+@media(max-width:800px){.input-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:500px){.input-grid{grid-template-columns:1fr}}
 .input-group{}
-.input-group label{display:block;font-size:0.76rem;font-weight:600;color:var(--g600);margin-bottom:0.35rem}
-.input-group .input-wrap{display:flex;align-items:center;gap:0;border:2px solid var(--g200);border-radius:10px;overflow:hidden;transition:border-color 0.2s}
-.input-group .input-wrap:focus-within{border-color:var(--accent)}
-.input-group .input-wrap span{
-  background:var(--g100);padding:0.4rem 0.7rem;font-size:0.8rem;
-  font-weight:600;color:var(--g500);border-right:2px solid var(--g200);font-family:'JetBrains Mono',monospace;min-width:32px
-}
-.input-group input{
-  flex:1;border:none;padding:0.4rem 0.7rem;font-size:0.95rem;
-  font-weight:600;font-family:'JetBrains Mono',monospace;
-  outline:none;background:#fff;color:var(--primary);width:100%;min-width:0
-}
-.cost-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;margin-top:1rem;padding-top:1rem;border-top:2px dashed var(--g200)}
-@media(max-width:900px){.cost-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:600px){.cost-grid{grid-template-columns:1fr}}
+.input-group label{font-size:0.75rem;font-weight:600;color:var(--g600);margin-bottom:0.3rem;display:block}
+.input-group .iw{display:flex;align-items:center;gap:0;border:2px solid var(--g200);border-radius:10px;overflow:hidden;transition:border-color 0.2s}
+.input-group .iw:focus-within{border-color:var(--a)}
+.input-group .iw span{background:var(--g100);padding:0.4rem 0.65rem;font-size:0.78rem;font-weight:600;color:var(--g500);border-right:2px solid var(--g200);font-family:'JetBrains Mono',monospace;min-width:30px}
+.input-group input{flex:1;border:none;padding:0.4rem 0.65rem;font-size:0.9rem;font-weight:600;font-family:'JetBrains Mono',monospace;outline:none;background:#fff;color:var(--p);width:100%;min-width:0}
+.cost-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:0.75rem;padding-top:0.75rem;border-top:2px dashed var(--g200)}
+@media(max-width:500px){.cost-row{grid-template-columns:1fr}}
 
 /* KPI ROW */
-.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
-@media(max-width:800px){.kpi-row{grid-template-columns:repeat(2,1fr)}}
-.kpi-card{
-  background:#fff;border-radius:var(--radius-sm);padding:1.1rem 1rem;
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0.75rem;margin-bottom:1.5rem}
+@media(max-width:700px){.kpi-row{grid-template-columns:repeat(2,1fr)}}
+.kpi-c{
+  background:#fff;border-radius:var(--rs);padding:1rem;
   text-align:center;border:1px solid var(--g200);box-shadow:var(--shadow)
 }
-.kpi-card .kpi-icon{font-size:1.2rem;margin-bottom:0.25rem}
-.kpi-card .kpi-val{font-size:1.7rem;font-weight:800;letter-spacing:-0.02em;line-height:1.2;font-family:'JetBrains Mono',monospace}
-.kpi-card .kpi-lbl{font-size:0.66rem;color:var(--g500);font-weight:500;text-transform:uppercase;letter-spacing:0.5px;margin-top:0.15rem}
-.kpi-red .kpi-val{color:var(--accent)}
-.kpi-blue .kpi-val{color:var(--blue)}
-.kpi-green .kpi-val{color:var(--green)}
-.kpi-amber .kpi-val{color:var(--amber)}
+.kpi-c .v{font-size:1.6rem;font-weight:800;letter-spacing:-0.02em;line-height:1.2;font-family:'JetBrains Mono',monospace}
+.kpi-c .l{font-size:0.64rem;color:var(--g500);font-weight:500;text-transform:uppercase;letter-spacing:0.5px;margin-top:0.15rem}
+.kpi-r .v{color:var(--a)}
+.kpi-b .v{color:var(--b)}
+.kpi-g .v{color:var(--g)}
+.kpi-am .v{color:var(--am)}
 
-/* STEPS */
-.section{margin-bottom:1.5rem}
-.section-header{margin-bottom:1rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
-.section-header .num{
+/* SECTION */
+.sec{margin-bottom:1.5rem}
+.sh{margin-bottom:1rem;display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap}
+.sh .num{
   display:inline-flex;align-items:center;justify-content:center;
-  width:36px;height:36px;border-radius:50%;
-  background:linear-gradient(135deg,var(--accent),#fb7185);color:#fff;
-  font-size:0.8rem;font-weight:700;flex-shrink:0;box-shadow:0 2px 8px rgba(233,69,96,0.3)
+  width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(135deg,var(--a),#fb7185);color:#fff;
+  font-size:0.78rem;font-weight:700;flex-shrink:0;box-shadow:0 2px 8px rgba(233,69,96,0.3)
 }
-.section-header h2{font-size:1.25rem;font-weight:800;color:var(--primary);letter-spacing:-0.02em}
-.section-header .tag{font-size:0.64rem;padding:0.2rem 0.7rem;border-radius:20px;font-weight:600}
-.tag-blue{background:var(--blue-l);color:#1e40af}
-.tag-green{background:var(--green-l);color:#065f46}
-.tag-red{background:var(--red-l);color:#991b1b}
-.tag-amber{background:var(--amber-l);color:#92400e}
+.sh h2{font-size:1.2rem;font-weight:800;color:var(--p);letter-spacing:-0.02em}
+.sh .tag{font-size:0.62rem;padding:0.2rem 0.7rem;border-radius:20px;font-weight:600}
+.tg-b{background:var(--bl);color:#1e40af}
+.tg-g{background:var(--gl);color:#065f46}
+.tg-r{background:var(--rl);color:#991b1b}
+.tg-a{background:var(--al);color:#92400e}
 
-.card{
-  background:#fff;border-radius:var(--radius);padding:1.5rem;
-  box-shadow:var(--shadow);border:1px solid var(--g200);margin-bottom:1rem
-}
-.card-title{font-size:1rem;font-weight:700;margin-bottom:0.75rem;display:flex;align-items:center;gap:0.5rem}
+.card{background:#fff;border-radius:var(--r);padding:1.5rem;box-shadow:var(--shadow);border:1px solid var(--g200);margin-bottom:1rem}
+.ct{font-size:1rem;font-weight:700;margin-bottom:0.75rem;display:flex;align-items:center;gap:0.5rem}
 
-.step-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem}
-@media(max-width:700px){.step-grid{grid-template-columns:1fr}}
+.two-c{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:800px){.two-c{grid-template-columns:1fr}}
 
-.step-item{
-  background:var(--g50);border-radius:var(--radius-sm);padding:1rem;
-  border:1px solid var(--g200);transition:all 0.2s
-}
-.step-item:hover{box-shadow:var(--shadow-md)}
-.step-item .s-num{font-size:0.62rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.5px}
-.step-item h4{font-size:0.82rem;margin:0.15rem 0 0.35rem;color:var(--primary)}
-.step-item .formula{
-  background:#fff;border-radius:6px;padding:0.4rem 0.65rem;
-  font-family:'JetBrains Mono',monospace;font-size:0.72rem;
-  border-left:3px solid var(--accent);margin:0.25rem 0;
-  border:1px solid var(--g200);box-shadow:0 1px 2px rgba(0,0,0,0.02);overflow-x:auto
-}
-.step-item .calc-line{font-size:0.74rem;color:var(--g600);margin:0.25rem 0;font-family:'JetBrains Mono',monospace}
-.step-item .result{font-size:0.78rem;font-weight:700;color:var(--green);margin-top:0.25rem}
-.step-item .result .val{font-size:1.05rem;color:var(--primary)}
-.step-item .meaning{font-size:0.72rem;color:var(--g500);margin-top:0.3rem;line-height:1.5}
+.step-box{background:var(--g50);border-radius:var(--rs);padding:1rem;border:1px solid var(--g200);margin-bottom:0.75rem}
+.step-box h4{font-size:0.82rem;margin-bottom:0.3rem;color:var(--p)}
+.step-box p{font-size:0.78rem;color:var(--g600);line-height:1.6}
+.step-box .hl{background:#fff;padding:0.4rem 0.65rem;border-radius:6px;font-weight:600;font-size:0.8rem;display:inline-block;margin:0.25rem 0;border:1px solid var(--g200)}
+.step-box .fm{background:#fff;border-radius:6px;padding:0.4rem 0.65rem;font-family:'JetBrains Mono',monospace;font-size:0.72rem;border-left:3px solid var(--a);margin:0.25rem 0;border:1px solid var(--g200)}
 
-/* TABLE */
-table{width:100%;border-collapse:separate;border-spacing:0;font-size:0.75rem}
-th{
-  background:var(--g50);color:var(--g600);font-weight:600;
-  padding:0.5rem 0.55rem;text-align:center;font-size:0.6rem;
-  text-transform:uppercase;letter-spacing:0.5px;border-bottom:2px solid var(--g200)
-}
-td{padding:0.45rem 0.55rem;text-align:center;border-bottom:1px solid var(--g100);font-family:'JetBrains Mono',monospace;font-size:0.72rem}
-tr.best{background:var(--green-l)!important}
-tr.best td{font-weight:600;color:#065f46}
-.table-wrap{overflow-x:auto;border-radius:var(--radius-sm);border:1px solid var(--g200)}
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:0.72rem}
+th{background:var(--g50);color:var(--g600);font-weight:600;padding:0.5rem 0.5rem;text-align:center;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.5px;border-bottom:2px solid var(--g200)}
+td{padding:0.45rem 0.5rem;text-align:center;border-bottom:1px solid var(--g100);font-family:'JetBrains Mono',monospace;font-size:0.7rem}
+tr.br{background:var(--gl)!important}
+tr.br td{font-weight:600;color:#065f46}
+.tw{overflow-x:auto;border-radius:var(--rs);border:1px solid var(--g200)}
 
-.chart-wrap{position:relative;height:260px;margin:0.5rem 0}
-.two-charts{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-@media(max-width:900px){.two-charts{grid-template-columns:1fr}}
+.chart-wrap{position:relative;height:250px;margin:0.5rem 0}
 
-.info-box{
-  padding:0.75rem 1rem;border-radius:0 var(--radius-sm) var(--radius-sm) 0;
-  margin:0.5rem 0;font-size:0.78rem;line-height:1.6;border-left:4px solid
-}
-.info-box.blue{background:var(--blue-l);border-left-color:#3b82f6}
-.info-box.green{background:var(--green-l);border-left-color:var(--green)}
-.info-box.red{background:var(--red-l);border-left-color:var(--accent)}
-.info-box.amber{background:var(--amber-l);border-left-color:var(--amber)}
+.info-box{padding:0.75rem 1rem;border-radius:0 var(--rs) var(--rs) 0;margin:0.5rem 0;font-size:0.78rem;line-height:1.6;border-left:4px solid}
+.info-box.blue{background:var(--bl);border-left-color:#3b82f6}
+.info-box.green{background:var(--gl);border-left-color:var(--g)}
+.info-box.red{background:var(--rl);border-left-color:var(--a)}
+.info-box.amber{background:var(--al);border-left-color:var(--am)}
 
-.verdict{
-  background:linear-gradient(135deg,var(--green-l),#f0fdf4);
-  border:2px solid var(--green);border-radius:var(--radius);
-  padding:1.5rem;text-align:center;margin-top:0.75rem
-}
-.verdict .big{font-size:2.6rem;font-weight:900;color:var(--green);line-height:1.2}
-.verdict p{color:#065f46;font-size:0.82rem}
+.vd{background:linear-gradient(135deg,var(--gl),#f0fdf4);border:2px solid var(--g);border-radius:var(--r);padding:1.5rem;text-align:center;margin-top:0.75rem}
+.vd .big{font-size:2.5rem;font-weight:900;color:var(--g);line-height:1.2}
+.vd p{color:#065f46;font-size:0.82rem}
 
-footer{
-  background:var(--primary);color:#475569;text-align:center;
-  padding:2.5rem 2rem;font-size:0.72rem;line-height:1.8
-}
+footer{background:var(--p);color:#475569;text-align:center;padding:2.5rem 2rem;font-size:0.72rem;line-height:1.8}
 footer strong{color:#64748b}
 
 @media(max-width:600px){
-  .hero h1{font-size:1.6rem}
-  .hero{padding:2.5rem 1rem 3rem}
-  .container{padding:0 1rem 2rem}
-  .kpi-card .kpi-val{font-size:1.2rem}
-  nav a{padding:0.25rem 0.5rem;font-size:0.65rem}
-  nav .logo{font-size:0.85rem}
+  .hero h1{font-size:1.6rem}.hero{padding:2.5rem 1rem 3rem}
+  .container{padding:0 1rem 2rem}.kpi-c .v{font-size:1.2rem}
+  nav a{padding:0.2rem 0.4rem;font-size:0.6rem}nav .logo{font-size:0.8rem}
 }
 </style>
 </head>
@@ -219,131 +154,165 @@ footer strong{color:#64748b}
 
 <nav>
   <div class="logo">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-    M/M/s Calculator
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--a)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    Queue Optimizer
   </div>
-  <a href="#structure" class="active">Structure</a>
-  <a href="#calculator">Calculator</a>
-  <a href="#steps">Steps</a>
+  <a href="#struct">System</a>
+  <a href="#data">Data</a>
+  <a href="#calc">Calculator</a>
+  <a href="#metrics">Metrics</a>
   <a href="#scenarios">Scenarios</a>
+  <a href="#economics">Economics</a>
 </nav>
 
 <div class="hero">
   <div class="hero-content">
-    <h1>M/M/s <span>Queueing Calculator</span></h1>
-    <p>Interactive queueing theory model. Input &lambda;, &mu;, s and costs &mdash; get instant utilization, queue length, wait times, and economic analysis.</p>
-    <div class="hero-tags">
-      <span>Poisson Arrivals</span>
-      <span>Exponential Service</span>
-      <span>s Servers (FIFO)</span>
-      <span>Economic Analysis</span>
+    <h1>Mart Cashier <span>Optimization</span></h1>
+    <p>M/M/s queueing model applied to real Mart data. 6 steps: from raw data &rarr; optimal cashiers.</p>
+    <div class="hero-days">
+      <span class="sun">&#9632; Sunday: &lambda;=16.02, &mu;=20.45, 43 customers</span>
+      <span class="fri">&#9632; Friday: &lambda;=13.62, &mu;=20.00, 32 customers</span>
     </div>
   </div>
 </div>
 
 <div class="container">
 
-<!-- ===== STRUCTURE DIAGRAM ===== -->
-<section id="structure">
+<!-- ===== STRUCTURE ===== -->
+<section id="struct">
   <div class="struct-card">
     <h3>&#9654; M/M/s Queueing System Structure</h3>
-    <img src="s.jpg" alt="M/M/s Queueing System Structure">
-    <div class="legend">
-      <span style="background:var(--red-l);color:#991b1b">&lambda; = Arrival Rate</span>
-      <span style="background:var(--amber-l);color:#92400e">Queue (FIFO)</span>
-      <span style="background:var(--blue-l);color:#1e40af">s Servers (&mu; each)</span>
-      <span style="background:var(--green-l);color:#065f46">Departures</span>
+    <img src="s.jpg" alt="M/M/s Queueing System">
+    <div style="display:flex;gap:1.5rem;justify-content:center;margin-top:0.75rem;flex-wrap:wrap;font-size:0.75rem;color:var(--g500);font-weight:500">
+      <span style="background:var(--rl);padding:0.2rem 0.8rem;border-radius:6px;color:#991b1b">&lambda; = Arrival Rate</span>
+      <span style="background:var(--al);padding:0.2rem 0.8rem;border-radius:6px;color:#92400e">Queue (FIFO)</span>
+      <span style="background:var(--bl);padding:0.2rem 0.8rem;border-radius:6px;color:#1e40af">s Servers (&mu; each)</span>
+      <span style="background:var(--gl);padding:0.2rem 0.8rem;border-radius:6px;color:#065f46">Departures</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DAY TABS + DATA OVERVIEW ===== -->
+<section id="data" style="margin-bottom:1.5rem">
+  <div class="sh">
+    <span class="num">1</span>
+    <h2>Raw Data Overview</h2>
+    <span class="tag tg-b">Sunday &amp; Friday</span>
+  </div>
+
+  <div class="two-c">
+    <div class="card" style="border-left:4px solid var(--a)">
+      <div class="ct">&#9632; Sunday</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem;margin-bottom:0.5rem">
+        <div class="kpi-c kpi-r"><div class="v">43</div><div class="l">Customers</div></div>
+        <div class="kpi-c kpi-b"><div class="v">161</div><div class="l">Minutes</div></div>
+        <div class="kpi-c kpi-g"><div class="v">12:01&ndash;14:42</div><div class="l">Time Window</div></div>
+      </div>
+      <p style="font-size:0.78rem;color:var(--g500)">2 cashiers active &bull; 87.9 total service min &bull; Busier day</p>
+    </div>
+    <div class="card" style="border-left:4px solid #3b82f6">
+      <div class="ct">&#9632; Friday</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem;margin-bottom:0.5rem">
+        <div class="kpi-c kpi-r"><div class="v">32</div><div class="l">Customers</div></div>
+        <div class="kpi-c kpi-b"><div class="v">141</div><div class="l">Minutes</div></div>
+        <div class="kpi-c kpi-g"><div class="v">10:15&ndash;12:36</div><div class="l">Time Window</div></div>
+      </div>
+      <p style="font-size:0.78rem;color:var(--g500)">2 cashiers active &bull; 86.25 total service min &bull; Less busy</p>
     </div>
   </div>
 </section>
 
 <!-- ===== INTERACTIVE CALCULATOR ===== -->
-<section id="calculator">
+<section id="calc" class="sec">
+  <div class="sh">
+    <span class="num">2</span>
+    <h2>&lambda; and &mu; Calculator</h2>
+    <span class="tag tg-b">interactive &mdash; adjust any value</span>
+  </div>
+
   <div class="input-panel">
-    <h3>&#9881; Queue Parameters</h3>
+    <h3>&#9881; Input Parameters</h3>
     <div class="input-grid">
       <div class="input-group">
-        <label>Arrival Rate (&lambda;)</label>
-        <div class="input-wrap"><span>&lambda;</span><input type="number" id="lamInput" value="16" step="0.1" min="0.1" max="100"></div>
+        <label>Arrival Rate (&lambda;) &mdash; customers/hr</label>
+        <div class="iw"><span>&lambda;</span><input type="number" id="lamIn" value="16" step="0.1" min="0.1"></div>
       </div>
       <div class="input-group">
-        <label>Service Rate (&mu;)</label>
-        <div class="input-wrap"><span>&mu;</span><input type="number" id="muInput" value="20" step="0.1" min="0.1" max="100"></div>
+        <label>Service Rate (&mu;) &mdash; customers/hr per cashier</label>
+        <div class="iw"><span>&mu;</span><input type="number" id="muIn" value="20" step="0.1" min="0.1"></div>
       </div>
       <div class="input-group">
         <label>Number of Servers (s)</label>
-        <div class="input-wrap"><span>s</span><input type="number" id="sInput" value="2" step="1" min="1" max="50"></div>
+        <div class="iw"><span>s</span><input type="number" id="sIn" value="2" step="1" min="1" max="50"></div>
       </div>
     </div>
-    <div class="cost-grid">
+    <div class="cost-row">
       <div class="input-group">
         <label>Cashier Cost ($/hr)</label>
-        <div class="input-wrap"><span>$</span><input type="number" id="cashierCostInput" value="8" step="0.5" min="0" max="500"></div>
+        <div class="iw"><span>$</span><input type="number" id="ccIn" value="8" step="0.5" min="0"></div>
       </div>
       <div class="input-group">
-        <label>Waiting Cost ($/hr per cust.)</label>
-        <div class="input-wrap"><span>$</span><input type="number" id="waitCostInput" value="5" step="0.5" min="0" max="500"></div>
+        <label>Waiting Cost ($/hr per customer)</label>
+        <div class="iw"><span>$</span><input type="number" id="wcIn" value="5" step="0.5" min="0"></div>
       </div>
-      <div class="input-group">
-        <label>Customers Observed</label>
-        <div class="input-wrap"><span>n</span><input type="number" id="custInput" value="43" step="1" min="1" max="999"></div>
+    </div>
+    <div style="margin-top:0.75rem;display:flex;gap:0.5rem;flex-wrap:wrap">
+      <button onclick="setSunday()" style="background:var(--a);color:#fff;border:none;padding:0.4rem 1.2rem;border-radius:8px;font-weight:600;font-size:0.78rem;cursor:pointer">&larr; Sunday (&lambda;=16.02, &mu;=20.45)</button>
+      <button onclick="setFriday()" style="background:#3b82f6;color:#fff;border:none;padding:0.4rem 1.2rem;border-radius:8px;font-weight:600;font-size:0.78rem;cursor:pointer">&larr; Friday (&lambda;=13.62, &mu;=20.00)</button>
+    </div>
+  </div>
+
+  <!-- KPI ROW -->
+  <div class="kpi-row">
+    <div class="kpi-c kpi-r"><div class="v" id="kpUtil">--</div><div class="l">Utilization (&rho;)</div></div>
+    <div class="kpi-c kpi-b"><div class="v" id="kpLq">--</div><div class="l">Queue Length (Lq)</div></div>
+    <div class="kpi-c kpi-g"><div class="v" id="kpWq">--</div><div class="l">Wait Time (Wq)</div></div>
+    <div class="kpi-c kpi-am"><div class="v" id="kpCost">--</div><div class="l">Total Cost $/hr</div></div>
+  </div>
+</section>
+
+<!-- ===== FORMULAS + STEP-BY-STEP ===== -->
+<section id="metrics" class="sec">
+  <div class="sh">
+    <span class="num">3</span>
+    <h2>M/M/s Formulas &amp; Calculations</h2>
+    <span class="tag tg-g">10 metrics with formulas</span>
+  </div>
+
+  <div class="two-c" id="stepsGrid">
+    <!-- Left: Sunday -->
+    <div>
+      <div class="card" style="border-left:4px solid var(--a)">
+        <div class="ct">&#9632; Sunday Results (&lambda;=16.02, &mu;=20.45)</div>
+        <div id="stepsSun"></div>
+      </div>
+    </div>
+    <!-- Right: Friday -->
+    <div>
+      <div class="card" style="border-left:4px solid #3b82f6">
+        <div class="ct">&#9632; Friday Results (&lambda;=13.62, &mu;=20.00)</div>
+        <div id="stepsFri"></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== KPI ROW ===== -->
-<div class="kpi-row" id="kpiRow">
-  <div class="kpi-card kpi-red">
-    <div class="kpi-icon">&#9654;</div>
-    <div class="kpi-val" id="kpiUtil">--</div>
-    <div class="kpi-lbl">Utilization (&rho;)</div>
-  </div>
-  <div class="kpi-card kpi-blue">
-    <div class="kpi-icon">&#9776;</div>
-    <div class="kpi-val" id="kpiLq">--</div>
-    <div class="kpi-lbl">Queue Length (Lq)</div>
-  </div>
-  <div class="kpi-card kpi-green">
-    <div class="kpi-icon">&#9201;</div>
-    <div class="kpi-val" id="kpiWq">--</div>
-    <div class="kpi-lbl">Wait Time (Wq)</div>
-  </div>
-  <div class="kpi-card kpi-amber">
-    <div class="kpi-icon">&#36;</div>
-    <div class="kpi-val" id="kpiCost">--</div>
-    <div class="kpi-lbl">Total Cost $/hr</div>
-  </div>
-</div>
-
-<!-- ===== STEP-BY-STEP ===== -->
-<section id="steps" class="section">
-  <div class="section-header">
-    <span class="num">1&ndash;10</span>
-    <h2>Step-by-Step Calculation</h2>
-    <span class="tag tag-blue">with formulas &amp; explanations</span>
-  </div>
-  <div class="card">
-    <div class="step-grid" id="stepsContainer"></div>
-  </div>
-</section>
-
-<!-- ===== SCENARIO SUMMARY ===== -->
-<section id="scenarios" class="section">
-  <div class="section-header">
-    <span class="num">&#9881;</span>
-    <h2>Scenario Summary</h2>
-    <span class="tag tag-amber">compare across &lambda; and s values</span>
+<!-- ===== SCENARIO COMPARISON TABLE ===== -->
+<section id="scenarios" class="sec">
+  <div class="sh">
+    <span class="num">4</span>
+    <h2>Scenario Comparison</h2>
+    <span class="tag tg-a">all scenarios side-by-side</span>
   </div>
 
   <div class="card">
-    <div class="card-title">&#9654; Scenarios: Changing &lambda; (14&ndash;19/hr) and s (1&ndash;2) with &mu;=20</div>
-    <div class="table-wrap">
+    <div class="ct">&#9654; Metrics Comparison: s=2 (&lambda;=14&ndash;19) vs s=1 (&lambda;=14)</div>
+    <div class="tw">
       <table>
         <thead>
           <tr>
             <th>Metric</th>
-            <th class="best">s=2 &lambda;=16</th>
+            <th class="br">s=2 &lambda;=16</th>
             <th>s=2 &lambda;=14</th>
             <th>s=2 &lambda;=15</th>
             <th>s=2 &lambda;=17</th>
@@ -353,25 +322,68 @@ footer strong{color:#64748b}
           </tr>
         </thead>
         <tbody>
-          <tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">Utilization (&rho;)</td><td class="best">0.400</td><td>0.350</td><td>0.375</td><td>0.425</td><td>0.450</td><td>0.475</td><td>0.700</td></tr>
-          <tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">Empty Prob (P&#8320;)</td><td class="best">0.429</td><td>0.481</td><td>0.455</td><td>0.404</td><td>0.379</td><td>0.356</td><td>0.300</td></tr>
-          <tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">Queue Length (Lq)</td><td class="best">0.152</td><td>0.098</td><td>0.123</td><td>0.187</td><td>0.229</td><td>0.277</td><td>1.633</td></tr>
-          <tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">System Length (L)</td><td class="best">0.952</td><td>0.798</td><td>0.873</td><td>1.037</td><td>1.129</td><td>1.227</td><td>2.333</td></tr>
-          <tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">Queue Time (Wq) min</td><td class="best">0.57</td><td>0.42</td><td>0.49</td><td>0.66</td><td>0.76</td><td>0.87</td><td>7.00</td></tr>
-          <tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">System Time (W) min</td><td class="best">3.57</td><td>3.42</td><td>3.49</td><td>3.66</td><td>3.76</td><td>3.87</td><td>10.00</td></tr>
-          <tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">Wait Prob (Pw)</td><td class="best">0.229</td><td>0.181</td><td>0.205</td><td>0.254</td><td>0.279</td><td>0.306</td><td>0.700</td></tr>
+          <tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">Utilization (&rho;)</td><td class="br">0.400</td><td>0.350</td><td>0.375</td><td>0.425</td><td>0.450</td><td>0.475</td><td>0.700</td></tr>
+          <tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">Empty Prob (P&#8320;)</td><td class="br">0.429</td><td>0.481</td><td>0.455</td><td>0.404</td><td>0.379</td><td>0.356</td><td>0.300</td></tr>
+          <tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">Queue Length (Lq)</td><td class="br">0.152</td><td>0.098</td><td>0.123</td><td>0.187</td><td>0.229</td><td>0.277</td><td>1.633</td></tr>
+          <tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">System Length (L)</td><td class="br">0.952</td><td>0.798</td><td>0.873</td><td>1.037</td><td>1.129</td><td>1.227</td><td>2.333</td></tr>
+          <tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">Queue Time (Wq) min</td><td class="br">0.57</td><td>0.42</td><td>0.49</td><td>0.66</td><td>0.76</td><td>0.87</td><td>7.00</td></tr>
+          <tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">System Time (W) min</td><td class="br">3.57</td><td>3.42</td><td>3.49</td><td>3.66</td><td>3.76</td><td>3.87</td><td>10.00</td></tr>
+          <tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">Wait Prob (Pw)</td><td class="br">0.229</td><td>0.181</td><td>0.205</td><td>0.254</td><td>0.279</td><td>0.306</td><td>0.700</td></tr>
         </tbody>
       </table>
     </div>
     <div class="info-box green" style="margin-top:0.75rem">
-      <strong>&#9733; Insight:</strong> With 2 cashiers (s=2), queue stays under 0.3 customers and wait under 1 min for all &lambda; values. With 1 cashier (s=1), queue hits 1.6 customers and wait jumps to 7 min &mdash; unacceptable.
+      <strong>&#9733; Key Insight:</strong> With s=2, queue stays under 0.3 customers and wait under 1 min for all &lambda; values. With s=1, queue hits 1.6 customers and wait jumps to 7 min &mdash; unacceptable for customer satisfaction.
+    </div>
+  </div>
+</section>
+
+<!-- ===== ECONOMIC ANALYSIS ===== -->
+<section id="economics" class="sec">
+  <div class="sh">
+    <span class="num">5</span>
+    <h2>Economic Analysis</h2>
+    <span class="tag tg-g">cost optimization</span>
+  </div>
+
+  <div class="two-c">
+    <div class="card" style="border-left:4px solid var(--a)">
+      <div class="ct">&#9632; Sunday &mdash; Cost by # Cashiers (&lambda;=16.02, &mu;=20.45)</div>
+      <div class="tw">
+        <table>
+          <thead><tr><th>s</th><th>&rho;</th><th>Lq</th><th>Wq (min)</th><th>Server $</th><th>Wait $</th><th>Total $</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>78.4%</td><td>2.83</td><td>10.61</td><td>$8</td><td>$18.10</td><td><strong>$26.10</strong></td></tr>
+            <tr class="br"><td>2</td><td>39.2%</td><td>0.14</td><td>0.53</td><td>$16</td><td>$4.63</td><td><strong>$20.63</strong></td></tr>
+            <tr><td>3</td><td>26.1%</td><td>0.02</td><td>0.07</td><td>$24</td><td>$4.00</td><td><strong>$28.00</strong></td></tr>
+            <tr><td>4</td><td>19.6%</td><td>0.00</td><td>0.01</td><td>$32</td><td>$3.90</td><td><strong>$35.90</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="info-box green" style="margin-top:0.5rem"><strong>&#9733; s=2 Optimal: $20.63/hr</strong> &mdash; Wait: 32 sec</div>
+    </div>
+
+    <div class="card" style="border-left:4px solid #3b82f6">
+      <div class="ct">&#9632; Friday &mdash; Cost by # Cashiers (&lambda;=13.62, &mu;=20.00)</div>
+      <div class="tw">
+        <table>
+          <thead><tr><th>s</th><th>&rho;</th><th>Lq</th><th>Wq (min)</th><th>Server $</th><th>Wait $</th><th>Total $</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>68.1%</td><td>1.46</td><td>6.42</td><td>$8</td><td>$14.75</td><td><strong>$22.75</strong></td></tr>
+            <tr class="br"><td>2</td><td>34.0%</td><td>0.09</td><td>0.39</td><td>$16</td><td>$3.85</td><td><strong>$19.85</strong></td></tr>
+            <tr><td>3</td><td>22.7%</td><td>0.01</td><td>0.04</td><td>$24</td><td>$3.45</td><td><strong>$27.45</strong></td></tr>
+            <tr><td>4</td><td>17.0%</td><td>0.00</td><td>0.01</td><td>$32</td><td>$3.35</td><td><strong>$35.35</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="info-box green" style="margin-top:0.5rem"><strong>&#9733; s=2 Optimal: $19.85/hr</strong> &mdash; Wait: 23 sec</div>
     </div>
   </div>
 
   <!-- CHARTS -->
   <div class="card">
-    <div class="card-title">&#9670; Cost &amp; Wait Comparison: s=1 to 5 (updates with your inputs)</div>
-    <div class="two-charts">
+    <div class="ct">&#9670; Cost Comparison Charts (auto-update with your inputs)</div>
+    <div class="two-c">
       <div class="chart-wrap"><canvas id="costChart"></canvas></div>
       <div class="chart-wrap"><canvas id="waitChart"></canvas></div>
     </div>
@@ -379,13 +391,13 @@ footer strong{color:#64748b}
 
   <!-- VERDICT -->
   <div class="card" style="text-align:center">
-    <div class="verdict" id="verdictBox">
-      <h3>&#9733; Optimal Configuration</h3>
+    <div class="vd">
+      <h3>&#9733; Final Recommendation</h3>
       <div class="big">s = 2</div>
-      <p id="verdictText">&lambda; = 16/hr &nbsp;|&nbsp; &mu; = 20/hr &nbsp;|&nbsp; Utilization: 39% &nbsp;|&nbsp; Wait: 32 sec &nbsp;|&nbsp; Cost: $20.63/hr</p>
+      <p>Optimal for both Sunday &amp; Friday &bull; Wait &lt; 1 minute &bull; Lowest total cost</p>
     </div>
     <div class="info-box blue" style="margin-top:1rem;text-align:left">
-      <strong>Why s=2?</strong> Adding a 2nd cashier ($8/hr) reduces waiting cost by $13.47/hr &mdash; net saving of $5.47/hr vs 1 cashier. Beyond 2, each extra cashier adds $8/hr but cuts wait cost by only ~$0.63/hr, a net loss.
+      <strong>Why s=2?</strong> The 2nd cashier (+$8/hr) reduces waiting cost by <strong>$13.47/hr (Sun)</strong> and <strong>$10.90/hr (Fri)</strong> &mdash; a positive ROI. Beyond 2, each extra cashier costs $8/hr but saves only ~$0.63/hr in wait cost, a net loss.
     </div>
   </div>
 </section>
@@ -393,8 +405,8 @@ footer strong{color:#64748b}
 </div>
 
 <footer>
-  <p><strong>M/M/s Queueing Calculator</strong> &bull; ITL304 Logistics Planning &amp; Modelling</p>
-  <p>Interactive queueing theory model &bull; Adjust all parameters in real-time</p>
+  <p><strong>Queueing Theory &mdash; M/M/s Model</strong> &bull; ITL304 Logistics Planning &amp; Modelling</p>
+  <p>Data from Mart Sunday (43 customers) &amp; Friday (32 customers) &bull; Realistic costs based on Cambodia 2026 wage research</p>
 </footer>
 
 <script>
@@ -403,7 +415,7 @@ function fact(n){if(n<=1)return 1;let r=1;for(let i=2;i<=n;i++)r*=i;return r}
 function mmS(lam, mu, s) {
   if (lam <= 0 || mu <= 0 || s < 1) return null;
   const rho = lam / (s * mu);
-  if (rho >= 1) return { error: 'Unstable: &rho; >= 1. Queue grows forever. Increase s or decrease &lambda;/increase &mu;.' };
+  if (rho >= 1) return null;
   let sum = 0;
   for (let n = 0; n < s; n++) sum += Math.pow(lam / mu, n) / fact(n);
   const last = Math.pow(lam / mu, s) / (fact(s) * (1 - rho));
@@ -416,245 +428,130 @@ function mmS(lam, mu, s) {
   return { rho, P0, Lq, L, Wq_hr, W_hr, Wq_min: Wq_hr * 60, Wq_sec: Wq_hr * 3600, W_min: W_hr * 60, Pw };
 }
 
-function updateAll() {
-  const lam = parseFloat(document.getElementById('lamInput').value) || 16;
-  const mu = parseFloat(document.getElementById('muInput').value) || 20;
-  const s = parseInt(document.getElementById('sInput').value) || 2;
-  const sc = parseFloat(document.getElementById('cashierCostInput').value) || 8;
-  const wc = parseFloat(document.getElementById('waitCostInput').value) || 5;
-  const n = parseInt(document.getElementById('custInput').value) || 43;
-
-  const r = mmS(lam, mu, s);
-
-  if (!r || r.error) {
-    const err = r ? r.error : 'Invalid input';
-    ['kpiUtil','kpiLq','kpiWq','kpiCost'].forEach(id => document.getElementById(id).textContent = '!');
-    document.getElementById('stepsContainer').innerHTML = `<div style="text-align:center;padding:2rem;color:var(--accent);font-weight:600">${err}</div>`;
-    return;
-  }
-
-  const totalCost = getTotalCost(s, r.L, sc, wc);
-
-  document.getElementById('kpiUtil').textContent = (r.rho * 100).toFixed(1) + '%';
-  document.getElementById('kpiLq').textContent = r.Lq.toFixed(3);
-  document.getElementById('kpiWq').innerHTML = r.Wq_min < 1 ? `${r.Wq_sec.toFixed(0)} sec` : `${r.Wq_min.toFixed(2)} min`;
-  document.getElementById('kpiCost').textContent = '$' + totalCost.toFixed(2);
-
-  // Auto-detect best s for current lam, mu
-  let bestS = s;
-  let bestCost = Infinity;
-  for (let testS = 1; testS <= 10; testS++) {
-    const tr = mmS(lam, mu, testS);
-    if (tr && !tr.error) {
-      const tc = getTotalCost(testS, tr.L, sc, wc);
-      if (tc < bestCost) { bestCost = tc; bestS = testS; }
-    }
-  }
-
-  // Update verdict
-  const isOptimal = bestS === s;
-  const verdictBox = document.getElementById('verdictBox');
-  const verdictText = document.getElementById('verdictText');
-  verdictBox.style.borderColor = isOptimal ? 'var(--green)' : 'var(--amber)';
-  verdictBox.style.background = isOptimal
-    ? 'linear-gradient(135deg,var(--green-l),#f0fdf4)'
-    : 'linear-gradient(135deg,var(--amber-l),#fffbeb)';
-  verdictText.innerHTML = `&lambda; = ${lam}/hr &nbsp;|&nbsp; &mu; = ${mu}/hr &nbsp;|&nbsp; Utilization: ${(r.rho*100).toFixed(1)}% &nbsp;|&nbsp; Wait: ${r.Wq_sec.toFixed(0)} sec &nbsp;|&nbsp; Cost: $${totalCost.toFixed(2)}/hr`
-    + (isOptimal ? '' : `<br><span style="color:var(--accent2)">&#9654; Optimal s = ${bestS} (cost: $${bestCost.toFixed(2)}/hr)</span>`);
-
-  renderSteps(lam, mu, s, r, sc, wc, n);
-  updateCharts(lam, mu, sc, wc);
-}
-
-function getTotalCost(s, L, sc, wc) {
-  return s * sc + L * wc;
-}
-
+// Step definitions for rendering
 const stepDefs = [
-  {
-    title: "Raw Data Summary",
-    formula: "Customers & divide; Minutes &times; 60 = rate",
-    calc: (lam, mu, s, r, sc, wc, n) => {
-      const hours = n / lam;
-      const mins = hours * 60;
-      return `${n} customers in ${mins.toFixed(0)} min with ${s} cashier${s>1?'s':''}`;
-    },
-    result: (lam, mu, s, r, sc, wc, n) => `&lambda;=&${lam ? '#' : '#'}x3bb;${lam}/hr, &mu;=${mu}/hr`,
-    meaning: (lam, mu, s, r, sc, wc, n) => `Observed ${n} customers. Service rate per cashier = ${mu}/hr.`
-  },
-  {
-    title: "Arrival Rate (&lambda;)",
-    formula: "&lambda; = Customers &divide; Observation Hours",
-    calc: (lam) => `${lam.toFixed(2)} customers/hr`,
-    result: (lam) => `<span class="val">${lam.toFixed(2)}</span> customers/hr`,
-    meaning: () => `About 1 person every ${(60/lam).toFixed(1)} minutes.`
-  },
-  {
-    title: "Service Rate (&mu;)",
-    formula: "&mu; = capacity per cashier per hour",
-    calc: (lam, mu) => `${mu.toFixed(2)} customers/hr per cashier`,
-    result: (lam, mu) => `<span class="val">${mu.toFixed(2)}</span> customers/hr`,
-    meaning: () => `Each cashier serves 1 customer every ${(60/mu).toFixed(1)} minutes.`
-  },
-  {
-    title: "Utilization (&rho;)",
-    formula: "&rho; = &lambda; / (s &times; &mu;)",
-    calc: (lam, mu, s, r) => `${lam.toFixed(2)} / (${s} &times; ${mu.toFixed(2)}) = ${r.rho.toFixed(4)}`,
-    result: (lam, mu, s, r) => `<span class="val">${(r.rho*100).toFixed(1)}%</span>`,
-    meaning: (lam, mu, s, r) => `${r.rho < 0.5 ? 'Low utilization. Cashiers are idle more than half the time.' : r.rho < 0.8 ? 'Moderate utilization.' : 'High utilization — risk of long queues.'}`
-  },
-  {
-    title: "Empty Probability (P&#8320;)",
-    formula: "P&#8320; = 1 / [&Sigma;(&lambda;/&mu;)<sup>n</sup>/n! + ...]",
-    calc: (lam, mu, s, r) => {
+  ['Utilization (&rho;)', '&rho; = &lambda; / (s &times; &mu;)'],
+  ['Empty Prob (P&#8320;)', 'P&#8320; = 1 / [&Sigma;(&lambda;/&mu;)<sup>n</sup>/n! + (&lambda;/&mu;)<sup>s</sup>/(s!(1-&rho;))]'],
+  ['Queue Length (Lq)', 'Lq = P&#8320; &times; (&lambda;/&mu;)<sup>s</sup> &times; &rho; / [s!(1-&rho;)<sup>2</sup>]'],
+  ['System Length (L)', 'L = Lq + &lambda;/&mu;'],
+  ['Queue Wait (Wq)', 'Wq = Lq / &lambda; (Little\'s Law)'],
+  ['Total Time (W)', 'W = Wq + 1/&mu;'],
+  ['Wait Prob (Pw)', 'Pw = (&lambda;/&mu;)<sup>s</sup> &times; P&#8320; / [s!(1-&rho;)]']
+];
+
+function renderSteps(lam, mu, s, containerId) {
+  const r = mmS(lam, mu, s);
+  const el = document.getElementById(containerId);
+  if (!r) { el.innerHTML = '<div style="padding:0.5rem;color:var(--a);font-size:0.8rem">&#9888; Unstable (&rho; &#8805; 1). Increase s or adjust rates.</div>'; return; }
+  el.innerHTML = stepDefs.map((d, i) => {
+    let calcStr = '', resStr = '', meaningStr = '';
+    if (i === 0) {
+      calcStr = `${lam.toFixed(2)} / (${s} &times; ${mu.toFixed(2)}) = ${r.rho.toFixed(4)}`;
+      resStr = `${(r.rho*100).toFixed(1)}%`;
+      meaningStr = r.rho < 0.5 ? 'Low utilization. Cashiers idle &gt;50% of time.' : r.rho < 0.8 ? 'Moderate utilization.' : 'High utilization &mdash; queue risk.';
+    } else if (i === 1) {
       const a = Math.pow(lam/mu, 0)/fact(0);
       const b = Math.pow(lam/mu, 1)/fact(1);
       const c = Math.pow(lam/mu, s)/(fact(s)*(1-r.rho));
-      return `1 / (${a.toFixed(4)} + ${b.toFixed(4)} + ${c.toFixed(4)}) = ${r.P0.toFixed(4)}`;
-    },
-    result: (lam, mu, s, r) => `<span class="val">${(r.P0*100).toFixed(1)}%</span>`,
-    meaning: () => `Chance the system is completely empty when you walk in.`
-  },
-  {
-    title: "Queue Length (Lq)",
-    formula: "Lq = P&#8320; &times; (&lambda;/&mu;)<sup>s</sup> &times; &rho; / [s!(1-&rho;)<sup>2</sup>]",
-    calc: (lam, mu, s, r) => `${r.Lq.toFixed(4)} customers`,
-    result: (lam, mu, s, r) => `<span class="val">${r.Lq.toFixed(3)}</span> customers`,
-    meaning: () => `Average number of people waiting in line.`
-  },
-  {
-    title: "System Length (L)",
-    formula: "L = Lq + &lambda;/&mu;",
-    calc: (lam, mu, s, r) => `${r.Lq.toFixed(4)} + ${(lam/mu).toFixed(4)} = ${r.L.toFixed(4)} customers`,
-    result: (lam, mu, s, r) => `<span class="val">${r.L.toFixed(3)}</span> customers`,
-    meaning: () => `Total people in queue + being served.`
-  },
-  {
-    title: "Queue Wait Time (Wq)",
-    formula: "Wq = Lq / &lambda; (Little's Law)",
-    calc: (lam, mu, s, r) => `${r.Lq.toFixed(4)} / ${lam.toFixed(2)} = ${r.Wq_hr.toFixed(4)} hr = ${r.Wq_sec.toFixed(0)} sec`,
-    result: (lam, mu, s, r) => `<span class="val">${r.Wq_sec.toFixed(0)} sec</span>`,
-    meaning: () => `Average time spent waiting in queue before service.`
-  },
-  {
-    title: "Total Time in System (W)",
-    formula: "W = Wq + 1/&mu;",
-    calc: (lam, mu, s, r) => `${r.Wq_hr.toFixed(4)} + ${(1/mu).toFixed(4)} = ${r.W_hr.toFixed(4)} hr = ${r.W_min.toFixed(2)} min`,
-    result: (lam, mu, s, r) => `<span class="val">${r.W_min.toFixed(2)} min</span>`,
-    meaning: () => `Total visit time: wait + service.`
-  },
-  {
-    title: "Probability of Waiting (Pw)",
-    formula: "Pw = (&lambda;/&mu;)<sup>s</sup> &times; P&#8320; / [s!(1-&rho;)]",
-    calc: (lam, mu, s, r) => `= ${r.Pw.toFixed(4)}`,
-    result: (lam, mu, s, r) => `<span class="val">${(r.Pw*100).toFixed(1)}%</span>`,
-    meaning: (lam, mu, s, r) => `${(r.Pw*100).toFixed(0)}% of customers wait. ${((1-r.Pw)*100).toFixed(0)}% go straight to a cashier.`
-  }
-];
-
-function renderSteps(lam, mu, s, r, sc, wc, n) {
-  const container = document.getElementById('stepsContainer');
-  container.innerHTML = '';
-  stepDefs.forEach((def, i) => {
-    const step = document.createElement('div');
-    step.className = 'step-item';
-    const calcStr = def.calc(lam, mu, s, r, sc, wc, n);
-    const resultStr = def.result(lam, mu, s, r, sc, wc, n);
-    const meaningStr = def.meaning(lam, mu, s, r, sc, wc, n);
-    step.innerHTML = `
-      <div class="s-num">Step ${i+1}</div>
-      <h4>${def.title}</h4>
-      <div class="formula">${def.formula}</div>
-      <div class="calc-line">${calcStr}</div>
-      <div class="result">= ${resultStr}</div>
-      <div class="meaning">${meaningStr}</div>
-    `;
-    container.appendChild(step);
-  });
+      calcStr = `1 / (${a.toFixed(4)} + ${b.toFixed(4)} + ${c.toFixed(4)})`;
+      resStr = `${(r.P0*100).toFixed(1)}%`;
+      meaningStr = `${(r.P0*100).toFixed(0)}% chance system is empty.`;
+    } else if (i === 2) {
+      calcStr = `${r.Lq.toFixed(4)} customers`;
+      resStr = `${r.Lq.toFixed(3)} customers`;
+      meaningStr = `Avg ${r.Lq.toFixed(2)} people waiting in line.`;
+    } else if (i === 3) {
+      calcStr = `${r.Lq.toFixed(4)} + ${(lam/mu).toFixed(4)} = ${r.L.toFixed(4)}`;
+      resStr = `${r.L.toFixed(3)} customers`;
+      meaningStr = `Total ${r.L.toFixed(1)} people in queue + service.`;
+    } else if (i === 4) {
+      calcStr = `${r.Lq.toFixed(4)} / ${lam.toFixed(2)} = ${r.Wq_hr.toFixed(4)} hr`;
+      resStr = `${r.Wq_sec.toFixed(0)} sec`;
+      meaningStr = `Wait ${r.Wq_sec.toFixed(0)} sec in queue.`;
+    } else if (i === 5) {
+      calcStr = `${r.Wq_hr.toFixed(4)} + ${(1/mu).toFixed(4)} = ${r.W_hr.toFixed(4)} hr`;
+      resStr = `${r.W_min.toFixed(2)} min`;
+      meaningStr = `Total visit: ${r.W_min.toFixed(1)} min (wait + service).`;
+    } else if (i === 6) {
+      calcStr = `= ${r.Pw.toFixed(4)}`;
+      resStr = `${(r.Pw*100).toFixed(1)}%`;
+      meaningStr = `${(r.Pw*100).toFixed(0)}% wait. ${((1-r.Pw)*100).toFixed(0)}% go straight to cashier.`;
+    }
+    return `<div class="step-box"><h4>${d[0]}</h4><div class="fm">${d[1]}</div><p>${calcStr}</p><div class="hl">= ${resStr}</div><p style="font-size:0.72rem;color:var(--g400);margin-top:0.25rem">${meaningStr}</p></div>`;
+  }).join('');
 }
 
-// Charts - fully dynamic
+function setSunday() {
+  document.getElementById('lamIn').value = 16.02;
+  document.getElementById('muIn').value = 20.45;
+  document.getElementById('sIn').value = 2;
+  updateAll();
+}
+function setFriday() {
+  document.getElementById('lamIn').value = 13.62;
+  document.getElementById('muIn').value = 20.00;
+  document.getElementById('sIn').value = 2;
+  updateAll();
+}
+
+// Charts
 let costChart, waitChart;
 
 function updateCharts(lam, mu, sc, wc) {
-  const labels = ['s=1', 's=2', 's=3', 's=4', 's=5'];
-  const costs = [];
-  const waits = [];
+  const labels = [], costs = [], waits = [];
   for (let s = 1; s <= 5; s++) {
     const r = mmS(lam, mu, s);
-    if (r && !r.error) {
-      costs.push(getTotalCost(s, r.L, sc, wc));
-      waits.push(r.Wq_min);
-    } else {
-      costs.push(null);
-      waits.push(null);
-    }
+    if (!r) break;
+    labels.push(`s=${s}`);
+    costs.push(getTC(s, r.L, sc, wc));
+    waits.push(r.Wq_min);
   }
+  const bestIdx = costs.indexOf(Math.min(...costs));
+  const bgC = costs.map((_, i) => i === bestIdx ? '#10b981' : '#93c5fd');
+  const bgW = waits.map((_, i) => i === bestIdx ? '#10b981' : '#93c5fd');
 
-  const costCtx = document.getElementById('costChart');
-  const waitCtx = document.getElementById('waitChart');
   if (costChart) costChart.destroy();
   if (waitChart) waitChart.destroy();
 
-  // Only include stable scenarios (stop at first null)
-  const lastStable = costs.findIndex(v => v === null);
-  const count = lastStable === -1 ? costs.length : lastStable;
-  const slicedLabels = labels.slice(0, count);
-  const slicedCosts = costs.slice(0, count);
-  const slicedWaits = waits.slice(0, count);
-
-  const bestIdx = slicedCosts.indexOf(Math.min(...slicedCosts));
-  const bgColors = slicedCosts.map((_, i) => i === bestIdx ? '#10b981' : '#93c5fd');
-
-  costChart = new Chart(costCtx, {
-    type: 'bar',
-    data: {
-      labels: slicedLabels,
-      datasets: [{ label: 'Total Cost ($/hr)', data: slicedCosts, backgroundColor: bgColors, borderRadius: 6 }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        title: { display: true, text: `Total Cost by # Servers ($${sc}/cashier, $${wc}/wait)`, font: { size: 11 } }
-      },
-      scales: {
-        y: { beginAtZero: true, title: { display: true, text: '$/hr' }, grid: { color: '#f1f5f9' } },
-        x: { grid: { display: false } }
-      }
-    }
+  costChart = new Chart(document.getElementById('costChart'), {
+    type: 'bar', data: { labels, datasets: [{ label: 'Cost $/hr', data: costs, backgroundColor: bgC, borderRadius: 6 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, title: { display: true, text: `Total Cost ($${sc}/cashier, $${wc}/wait)`, font: { size: 11 } } }, scales: { y: { beginAtZero: true, title: { display: true, text: '$/hr' }, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } } }
   });
-
-  const bgWait = slicedWaits.map((_, i) => i === bestIdx ? '#10b981' : '#93c5fd');
-  waitChart = new Chart(waitCtx, {
-    type: 'bar',
-    data: {
-      labels: slicedLabels,
-      datasets: [{ label: 'Wait Time (min)', data: slicedWaits, backgroundColor: bgWait, borderRadius: 6 }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        title: { display: true, text: 'Avg Wait Time in Queue (min)', font: { size: 11 } }
-      },
-      scales: {
-        y: { beginAtZero: true, title: { display: true, text: 'Minutes' }, grid: { color: '#f1f5f9' } },
-        x: { grid: { display: false } }
-      }
-    }
+  waitChart = new Chart(document.getElementById('waitChart'), {
+    type: 'bar', data: { labels, datasets: [{ label: 'Wait (min)', data: waits, backgroundColor: bgW, borderRadius: 6 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, title: { display: true, text: 'Avg Wait Time in Queue (min)', font: { size: 11 } } }, scales: { y: { beginAtZero: true, title: { display: true, text: 'Minutes' }, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } } }
   });
 }
 
-// Input listeners
-document.getElementById('lamInput').addEventListener('input', updateAll);
-document.getElementById('muInput').addEventListener('input', updateAll);
-document.getElementById('sInput').addEventListener('input', updateAll);
-document.getElementById('cashierCostInput').addEventListener('input', updateAll);
-document.getElementById('waitCostInput').addEventListener('input', updateAll);
-document.getElementById('custInput').addEventListener('input', updateAll);
+function getTC(s, L, sc, wc) { return s * sc + L * wc; }
 
-// Init with defaults
+function updateAll() {
+  const lam = parseFloat(document.getElementById('lamIn').value) || 16;
+  const mu = parseFloat(document.getElementById('muIn').value) || 20;
+  const s = parseInt(document.getElementById('sIn').value) || 2;
+  const sc = parseFloat(document.getElementById('ccIn').value) || 8;
+  const wc = parseFloat(document.getElementById('wcIn').value) || 5;
+
+  const r = mmS(lam, mu, s);
+  if (r) {
+    const tc = getTC(s, r.L, sc, wc);
+    document.getElementById('kpUtil').textContent = (r.rho * 100).toFixed(1) + '%';
+    document.getElementById('kpLq').textContent = r.Lq.toFixed(3);
+    document.getElementById('kpWq').innerHTML = r.Wq_min < 1 ? `${r.Wq_sec.toFixed(0)} sec` : `${r.Wq_min.toFixed(1)} min`;
+    document.getElementById('kpCost').textContent = '$' + tc.toFixed(2);
+  } else {
+    ['kpUtil','kpLq','kpWq','kpCost'].forEach(id => document.getElementById(id).textContent = '!');
+  }
+
+  renderSteps(16.02, 20.45, 2, 'stepsSun');
+  renderSteps(13.62, 20.00, 2, 'stepsFri');
+  updateCharts(lam, mu, sc, wc);
+}
+
+// Listeners
+['lamIn','muIn','sIn','ccIn','wcIn'].forEach(id => document.getElementById(id).addEventListener('input', updateAll));
+
+// Init
 updateAll();
 </script>
 </body>
