@@ -370,7 +370,7 @@ footer strong{color:#64748b}
 
   <!-- CHARTS -->
   <div class="card">
-    <div class="card-title">&#9670; Cost &amp; Wait Comparison: s=1 vs s=2</div>
+    <div class="card-title">&#9670; Cost &amp; Wait Comparison: s=1 to 5 (updates with your inputs)</div>
     <div class="two-charts">
       <div class="chart-wrap"><canvas id="costChart"></canvas></div>
       <div class="chart-wrap"><canvas id="waitChart"></canvas></div>
@@ -463,6 +463,7 @@ function updateAll() {
     + (isOptimal ? '' : `<br><span style="color:var(--accent2)">&#9654; Optimal s = ${bestS} (cost: $${bestCost.toFixed(2)}/hr)</span>`);
 
   renderSteps(lam, mu, s, r, sc, wc, n);
+  updateCharts(lam, mu, sc, wc);
 }
 
 function getTotalCost(s, L, sc, wc) {
@@ -572,28 +573,50 @@ function renderSteps(lam, mu, s, r, sc, wc, n) {
   });
 }
 
-// Chart instances
+// Charts - fully dynamic
 let costChart, waitChart;
 
-function initCharts() {
-  const labels = ['&lambda;=14', '&lambda;=15', '&lambda;=16', '&lambda;=17', '&lambda;=18', '&lambda;=19'];
-  const s2cost = [14.79, 15.66, 16.76, 18.19, 19.64, 21.13];
-  const s1cost = [14.83, 15.95, 17.27, 18.80, 20.44, 22.20];
+function updateCharts(lam, mu, sc, wc) {
+  const labels = ['s=1', 's=2', 's=3', 's=4', 's=5'];
+  const costs = [];
+  const waits = [];
+  for (let s = 1; s <= 5; s++) {
+    const r = mmS(lam, mu, s);
+    if (r && !r.error) {
+      costs.push(getTotalCost(s, r.L, sc, wc));
+      waits.push(r.Wq_min);
+    } else {
+      costs.push(null);
+      waits.push(null);
+    }
+  }
 
-  costChart = new Chart(document.getElementById('costChart'), {
+  const costCtx = document.getElementById('costChart');
+  const waitCtx = document.getElementById('waitChart');
+  if (costChart) costChart.destroy();
+  if (waitChart) waitChart.destroy();
+
+  // Only include stable scenarios (stop at first null)
+  const lastStable = costs.findIndex(v => v === null);
+  const count = lastStable === -1 ? costs.length : lastStable;
+  const slicedLabels = labels.slice(0, count);
+  const slicedCosts = costs.slice(0, count);
+  const slicedWaits = waits.slice(0, count);
+
+  const bestIdx = slicedCosts.indexOf(Math.min(...slicedCosts));
+  const bgColors = slicedCosts.map((_, i) => i === bestIdx ? '#10b981' : '#93c5fd');
+
+  costChart = new Chart(costCtx, {
     type: 'bar',
     data: {
-      labels,
-      datasets: [
-        { label: 's=1 Total Cost ($/hr)', data: s1cost, backgroundColor: '#fca5a5', borderRadius: 4 },
-        { label: 's=2 Total Cost ($/hr)', data: s2cost, backgroundColor: '#10b981', borderRadius: 4 }
-      ]
+      labels: slicedLabels,
+      datasets: [{ label: 'Total Cost ($/hr)', data: slicedCosts, backgroundColor: bgColors, borderRadius: 6 }]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
       plugins: {
-        legend: { position: 'top', labels: { boxWidth: 12, padding: 12 } },
-        title: { display: true, text: 'Cost: s=1 vs s=2', font: { size: 12 } }
+        legend: { display: false },
+        title: { display: true, text: `Total Cost by # Servers ($${sc}/cashier, $${wc}/wait)`, font: { size: 11 } }
       },
       scales: {
         y: { beginAtZero: true, title: { display: true, text: '$/hr' }, grid: { color: '#f1f5f9' } },
@@ -602,23 +625,18 @@ function initCharts() {
     }
   });
 
-  const s2wait = [0.42, 0.49, 0.57, 0.66, 0.76, 0.87];
-  const s1wait = [7.00, 9.00, 12.00, 16.00, 22.00, 30.00];
-
-  waitChart = new Chart(document.getElementById('waitChart'), {
+  const bgWait = slicedWaits.map((_, i) => i === bestIdx ? '#10b981' : '#93c5fd');
+  waitChart = new Chart(waitCtx, {
     type: 'bar',
     data: {
-      labels,
-      datasets: [
-        { label: 's=1 Wait Time (min)', data: s1wait, backgroundColor: '#fca5a5', borderRadius: 4 },
-        { label: 's=2 Wait Time (min)', data: s2wait, backgroundColor: '#60a5fa', borderRadius: 4 }
-      ]
+      labels: slicedLabels,
+      datasets: [{ label: 'Wait Time (min)', data: slicedWaits, backgroundColor: bgWait, borderRadius: 6 }]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
       plugins: {
-        legend: { position: 'top', labels: { boxWidth: 12, padding: 12 } },
-        title: { display: true, text: 'Wait Time: s=1 vs s=2', font: { size: 12 } }
+        legend: { display: false },
+        title: { display: true, text: 'Avg Wait Time in Queue (min)', font: { size: 11 } }
       },
       scales: {
         y: { beginAtZero: true, title: { display: true, text: 'Minutes' }, grid: { color: '#f1f5f9' } },
@@ -638,7 +656,6 @@ document.getElementById('custInput').addEventListener('input', updateAll);
 
 // Init with defaults
 updateAll();
-initCharts();
 </script>
 </body>
 </html>
