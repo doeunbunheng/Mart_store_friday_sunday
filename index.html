@@ -48,16 +48,16 @@ nav a.active{color:#fff;background:var(--accent)}
 
 .hero{
   background:linear-gradient(135deg,#0f172a 0%,#1e293b 50%,#0f3460 100%);
-  color:#fff;padding:4rem 2rem 5rem;text-align:center;position:relative;overflow:hidden
+  color:#fff;padding:3.5rem 2rem 4rem;text-align:center;position:relative;overflow:hidden
 }
 .hero::after{
   content:'';position:absolute;bottom:0;left:0;right:0;
   height:60px;background:#f1f5f9;border-radius:50% 50% 0 0/100% 100% 0 0
 }
 .hero-content{position:relative;z-index:2}
-.hero h1{font-size:2.6rem;font-weight:900;margin-bottom:0.6rem;line-height:1.1;letter-spacing:-0.03em}
+.hero h1{font-size:2.4rem;font-weight:900;margin-bottom:0.5rem;line-height:1.1;letter-spacing:-0.03em}
 .hero h1 span{background:linear-gradient(135deg,var(--accent),#fb7185);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero p{font-size:1rem;color:#94a3b8;max-width:550px;margin:0 auto 1.5rem;line-height:1.7}
+.hero p{font-size:0.95rem;color:#94a3b8;max-width:550px;margin:0 auto 1.2rem;line-height:1.7}
 .hero-tags{display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap}
 .hero-tags span{
   background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);
@@ -66,65 +66,74 @@ nav a.active{color:#fff;background:var(--accent)}
 
 .container{max-width:1100px;margin:-3.5rem auto 0;padding:0 1.5rem 3rem;position:relative;z-index:2}
 
+/* STRUCTURE IMAGE */
+.struct-card{
+  background:#fff;border-radius:var(--radius);padding:1.5rem;
+  box-shadow:var(--shadow-lg);border:1px solid var(--g200);margin-bottom:1.5rem;text-align:center
+}
+.struct-card h3{font-size:1rem;font-weight:700;margin-bottom:0.75rem;color:var(--primary)}
+.struct-card img{
+  max-width:100%;height:auto;border-radius:var(--radius-sm);
+  border:1px solid var(--g200);box-shadow:var(--shadow)
+}
+.struct-card .legend{
+  display:flex;gap:1.5rem;justify-content:center;margin-top:0.75rem;
+  flex-wrap:wrap;font-size:0.78rem;color:var(--g500)
+}
+.struct-card .legend span{padding:0.2rem 0.8rem;border-radius:6px;font-weight:500}
+
 /* INPUT PANEL */
 .input-panel{
   background:#fff;border-radius:var(--radius);padding:1.75rem;
-  box-shadow:var(--shadow-lg);border:1px solid var(--g200);margin-bottom:2rem
+  box-shadow:var(--shadow-lg);border:1px solid var(--g200);margin-bottom:1.5rem
 }
-.input-panel h3{font-size:1.1rem;font-weight:700;margin-bottom:1.25rem;display:flex;align-items:center;gap:0.5rem}
-.input-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.5rem}
-@media(max-width:800px){.input-grid{grid-template-columns:1fr}}
+.input-panel h3{font-size:1.05rem;font-weight:700;margin-bottom:1.25rem;display:flex;align-items:center;gap:0.5rem}
+.input-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem}
+@media(max-width:900px){.input-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.input-grid{grid-template-columns:1fr}}
 .input-group{}
-.input-group label{display:block;font-size:0.78rem;font-weight:600;color:var(--g600);margin-bottom:0.4rem}
+.input-group label{display:block;font-size:0.76rem;font-weight:600;color:var(--g600);margin-bottom:0.35rem}
 .input-group .input-wrap{display:flex;align-items:center;gap:0;border:2px solid var(--g200);border-radius:10px;overflow:hidden;transition:border-color 0.2s}
 .input-group .input-wrap:focus-within{border-color:var(--accent)}
 .input-group .input-wrap span{
-  background:var(--g100);padding:0.5rem 0.8rem;font-size:0.85rem;
-  font-weight:600;color:var(--g500);border-right:2px solid var(--g200);font-family:'JetBrains Mono',monospace
+  background:var(--g100);padding:0.4rem 0.7rem;font-size:0.8rem;
+  font-weight:600;color:var(--g500);border-right:2px solid var(--g200);font-family:'JetBrains Mono',monospace;min-width:32px
 }
 .input-group input{
-  flex:1;border:none;padding:0.5rem 0.8rem;font-size:1rem;
+  flex:1;border:none;padding:0.4rem 0.7rem;font-size:0.95rem;
   font-weight:600;font-family:'JetBrains Mono',monospace;
-  outline:none;background:#fff;color:var(--primary);width:100%
+  outline:none;background:#fff;color:var(--primary);width:100%;min-width:0
 }
-.input-group input[type=range]{
-  padding:0;margin-top:0.5rem;height:5px;-webkit-appearance:none;
-  background:var(--g200);border-radius:5px;outline:none
-}
-.input-group input[type=range]::-webkit-slider-thumb{
-  -webkit-appearance:none;width:16px;height:16px;border-radius:50%;
-  background:var(--accent);cursor:pointer;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,0.2)
-}
-.input-group .hint{font-size:0.7rem;color:var(--g400);margin-top:0.3rem}
+.cost-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;margin-top:1rem;padding-top:1rem;border-top:2px dashed var(--g200)}
+@media(max-width:900px){.cost-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.cost-grid{grid-template-columns:1fr}}
 
 /* KPI ROW */
-.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
 @media(max-width:800px){.kpi-row{grid-template-columns:repeat(2,1fr)}}
 .kpi-card{
-  background:#fff;border-radius:var(--radius-sm);padding:1.2rem 1rem;
+  background:#fff;border-radius:var(--radius-sm);padding:1.1rem 1rem;
   text-align:center;border:1px solid var(--g200);box-shadow:var(--shadow)
 }
-.kpi-card .kpi-icon{font-size:1.3rem;margin-bottom:0.3rem}
-.kpi-card .kpi-val{font-size:1.8rem;font-weight:800;letter-spacing:-0.02em;line-height:1.2}
-.kpi-card .kpi-lbl{font-size:0.68rem;color:var(--g500);font-weight:500;text-transform:uppercase;letter-spacing:0.5px;margin-top:0.2rem}
+.kpi-card .kpi-icon{font-size:1.2rem;margin-bottom:0.25rem}
+.kpi-card .kpi-val{font-size:1.7rem;font-weight:800;letter-spacing:-0.02em;line-height:1.2;font-family:'JetBrains Mono',monospace}
+.kpi-card .kpi-lbl{font-size:0.66rem;color:var(--g500);font-weight:500;text-transform:uppercase;letter-spacing:0.5px;margin-top:0.15rem}
 .kpi-red .kpi-val{color:var(--accent)}
 .kpi-blue .kpi-val{color:var(--blue)}
 .kpi-green .kpi-val{color:var(--green)}
 .kpi-amber .kpi-val{color:var(--amber)}
 
-/* SECTION */
+/* STEPS */
 .section{margin-bottom:1.5rem}
 .section-header{margin-bottom:1rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
 .section-header .num{
   display:inline-flex;align-items:center;justify-content:center;
-  width:38px;height:38px;border-radius:50%;
+  width:36px;height:36px;border-radius:50%;
   background:linear-gradient(135deg,var(--accent),#fb7185);color:#fff;
-  font-size:0.85rem;font-weight:700;flex-shrink:0;box-shadow:0 2px 8px rgba(233,69,96,0.3)
+  font-size:0.8rem;font-weight:700;flex-shrink:0;box-shadow:0 2px 8px rgba(233,69,96,0.3)
 }
-.section-header h2{font-size:1.3rem;font-weight:800;color:var(--primary);letter-spacing:-0.02em}
-.section-header .tag{
-  font-size:0.65rem;padding:0.2rem 0.7rem;border-radius:20px;font-weight:600
-}
+.section-header h2{font-size:1.25rem;font-weight:800;color:var(--primary);letter-spacing:-0.02em}
+.section-header .tag{font-size:0.64rem;padding:0.2rem 0.7rem;border-radius:20px;font-weight:600}
 .tag-blue{background:var(--blue-l);color:#1e40af}
 .tag-green{background:var(--green-l);color:#065f46}
 .tag-red{background:var(--red-l);color:#991b1b}
@@ -140,47 +149,42 @@ nav a.active{color:#fff;background:var(--accent)}
 @media(max-width:700px){.step-grid{grid-template-columns:1fr}}
 
 .step-item{
-  background:var(--g50);border-radius:var(--radius-sm);padding:1.1rem;
+  background:var(--g50);border-radius:var(--radius-sm);padding:1rem;
   border:1px solid var(--g200);transition:all 0.2s
 }
 .step-item:hover{box-shadow:var(--shadow-md)}
-.step-item .s-num{font-size:0.65rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.5px}
-.step-item h4{font-size:0.85rem;margin:0.2rem 0 0.4rem;color:var(--primary)}
+.step-item .s-num{font-size:0.62rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.5px}
+.step-item h4{font-size:0.82rem;margin:0.15rem 0 0.35rem;color:var(--primary)}
 .step-item .formula{
-  background:#fff;border-radius:6px;padding:0.45rem 0.7rem;
-  font-family:'JetBrains Mono',monospace;font-size:0.78rem;
-  border-left:3px solid var(--accent);margin:0.3rem 0;
-  border:1px solid var(--g200);box-shadow:0 1px 2px rgba(0,0,0,0.03)
+  background:#fff;border-radius:6px;padding:0.4rem 0.65rem;
+  font-family:'JetBrains Mono',monospace;font-size:0.72rem;
+  border-left:3px solid var(--accent);margin:0.25rem 0;
+  border:1px solid var(--g200);box-shadow:0 1px 2px rgba(0,0,0,0.02);overflow-x:auto
 }
-.step-item .result{
-  font-size:0.82rem;font-weight:700;color:var(--green);margin-top:0.3rem
-}
-.step-item .result .val{font-size:1.1rem;color:var(--primary)}
-.step-item .meaning{
-  font-size:0.75rem;color:var(--g500);margin-top:0.35rem;line-height:1.5
-}
+.step-item .calc-line{font-size:0.74rem;color:var(--g600);margin:0.25rem 0;font-family:'JetBrains Mono',monospace}
+.step-item .result{font-size:0.78rem;font-weight:700;color:var(--green);margin-top:0.25rem}
+.step-item .result .val{font-size:1.05rem;color:var(--primary)}
+.step-item .meaning{font-size:0.72rem;color:var(--g500);margin-top:0.3rem;line-height:1.5}
 
 /* TABLE */
-table{width:100%;border-collapse:separate;border-spacing:0;font-size:0.78rem}
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:0.75rem}
 th{
   background:var(--g50);color:var(--g600);font-weight:600;
-  padding:0.55rem 0.6rem;text-align:center;font-size:0.63rem;
+  padding:0.5rem 0.55rem;text-align:center;font-size:0.6rem;
   text-transform:uppercase;letter-spacing:0.5px;border-bottom:2px solid var(--g200)
 }
-td{padding:0.5rem 0.6rem;text-align:center;border-bottom:1px solid var(--g100)}
+td{padding:0.45rem 0.55rem;text-align:center;border-bottom:1px solid var(--g100);font-family:'JetBrains Mono',monospace;font-size:0.72rem}
 tr.best{background:var(--green-l)!important}
 tr.best td{font-weight:600;color:#065f46}
-tr.best td:first-child{border-radius:6px 0 0 6px}
-tr.best td:last-child{border-radius:0 6px 6px 0}
 .table-wrap{overflow-x:auto;border-radius:var(--radius-sm);border:1px solid var(--g200)}
 
-.chart-wrap{position:relative;height:280px;margin:0.5rem 0}
+.chart-wrap{position:relative;height:260px;margin:0.5rem 0}
 .two-charts{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 @media(max-width:900px){.two-charts{grid-template-columns:1fr}}
 
 .info-box{
-  padding:0.8rem 1rem;border-radius:0 var(--radius-sm) var(--radius-sm) 0;
-  margin:0.5rem 0;font-size:0.8rem;line-height:1.6;border-left:4px solid
+  padding:0.75rem 1rem;border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  margin:0.5rem 0;font-size:0.78rem;line-height:1.6;border-left:4px solid
 }
 .info-box.blue{background:var(--blue-l);border-left-color:#3b82f6}
 .info-box.green{background:var(--green-l);border-left-color:var(--green)}
@@ -192,19 +196,22 @@ tr.best td:last-child{border-radius:0 6px 6px 0}
   border:2px solid var(--green);border-radius:var(--radius);
   padding:1.5rem;text-align:center;margin-top:0.75rem
 }
-.verdict .big{font-size:2.8rem;font-weight:900;color:var(--green);line-height:1.2}
-.verdict p{color:#065f46;font-size:0.85rem}
+.verdict .big{font-size:2.6rem;font-weight:900;color:var(--green);line-height:1.2}
+.verdict p{color:#065f46;font-size:0.82rem}
 
 footer{
   background:var(--primary);color:#475569;text-align:center;
-  padding:2.5rem 2rem;font-size:0.73rem;line-height:1.8
+  padding:2.5rem 2rem;font-size:0.72rem;line-height:1.8
 }
 footer strong{color:#64748b}
 
 @media(max-width:600px){
-  .hero h1{font-size:1.8rem}
-  .kpi-card .kpi-val{font-size:1.3rem}
-  nav a{padding:0.3rem 0.6rem;font-size:0.7rem}
+  .hero h1{font-size:1.6rem}
+  .hero{padding:2.5rem 1rem 3rem}
+  .container{padding:0 1rem 2rem}
+  .kpi-card .kpi-val{font-size:1.2rem}
+  nav a{padding:0.25rem 0.5rem;font-size:0.65rem}
+  nav .logo{font-size:0.85rem}
 }
 </style>
 </head>
@@ -215,7 +222,8 @@ footer strong{color:#64748b}
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
     M/M/s Calculator
   </div>
-  <a href="#calculator" class="active">Calculator</a>
+  <a href="#structure" class="active">Structure</a>
+  <a href="#calculator">Calculator</a>
   <a href="#steps">Steps</a>
   <a href="#scenarios">Scenarios</a>
 </nav>
@@ -223,42 +231,63 @@ footer strong{color:#64748b}
 <div class="hero">
   <div class="hero-content">
     <h1>M/M/s <span>Queueing Calculator</span></h1>
-    <p>Interactive M/M/s queueing model. Input &lambda;, &mu;, s and get instant results — utilization, queue length, wait times, and economic cost.</p>
+    <p>Interactive queueing theory model. Input &lambda;, &mu;, s and costs &mdash; get instant utilization, queue length, wait times, and economic analysis.</p>
     <div class="hero-tags">
       <span>Poisson Arrivals</span>
       <span>Exponential Service</span>
-      <span>s Servers</span>
-      <span>FIFO Queue</span>
+      <span>s Servers (FIFO)</span>
+      <span>Economic Analysis</span>
     </div>
   </div>
 </div>
 
 <div class="container">
 
+<!-- ===== STRUCTURE DIAGRAM ===== -->
+<section id="structure">
+  <div class="struct-card">
+    <h3>&#9654; M/M/s Queueing System Structure</h3>
+    <img src="s.jpg" alt="M/M/s Queueing System Structure">
+    <div class="legend">
+      <span style="background:var(--red-l);color:#991b1b">&lambda; = Arrival Rate</span>
+      <span style="background:var(--amber-l);color:#92400e">Queue (FIFO)</span>
+      <span style="background:var(--blue-l);color:#1e40af">s Servers (&mu; each)</span>
+      <span style="background:var(--green-l);color:#065f46">Departures</span>
+    </div>
+  </div>
+</section>
+
 <!-- ===== INTERACTIVE CALCULATOR ===== -->
 <section id="calculator">
   <div class="input-panel">
-    <h3>&#9881; Input Parameters</h3>
+    <h3>&#9881; Queue Parameters</h3>
     <div class="input-grid">
       <div class="input-group">
         <label>Arrival Rate (&lambda;)</label>
-        <div class="input-wrap"><span>&lambda;</span><input type="number" id="lamInput" value="16" step="0.1" min="1" max="100"></div>
-        <div class="hint">Customers per hour</div>
+        <div class="input-wrap"><span>&lambda;</span><input type="number" id="lamInput" value="16" step="0.1" min="0.1" max="100"></div>
       </div>
       <div class="input-group">
         <label>Service Rate (&mu;)</label>
-        <div class="input-wrap"><span>&mu;</span><input type="number" id="muInput" value="20" step="0.1" min="1" max="100"></div>
-        <div class="hint">Customers per hour per cashier</div>
+        <div class="input-wrap"><span>&mu;</span><input type="number" id="muInput" value="20" step="0.1" min="0.1" max="100"></div>
       </div>
       <div class="input-group">
         <label>Number of Servers (s)</label>
-        <div class="input-wrap"><span>s</span><input type="number" id="sInput" value="2" step="1" min="1" max="20"></div>
-        <div class="hint">Number of cashiers</div>
+        <div class="input-wrap"><span>s</span><input type="number" id="sInput" value="2" step="1" min="1" max="50"></div>
       </div>
     </div>
-    <div style="margin-top:1rem;display:flex;gap:0.5rem;flex-wrap:wrap">
-      <button onclick="document.location='#steps'" style="background:var(--accent);color:#fff;border:none;padding:0.5rem 1.5rem;border-radius:8px;font-weight:600;font-size:0.85rem;cursor:pointer">Calculate &darr;</button>
-      <span style="font-size:0.72rem;color:var(--g400);align-self:center">Results update instantly below</span>
+    <div class="cost-grid">
+      <div class="input-group">
+        <label>Cashier Cost ($/hr)</label>
+        <div class="input-wrap"><span>$</span><input type="number" id="cashierCostInput" value="8" step="0.5" min="0" max="500"></div>
+      </div>
+      <div class="input-group">
+        <label>Waiting Cost ($/hr per cust.)</label>
+        <div class="input-wrap"><span>$</span><input type="number" id="waitCostInput" value="5" step="0.5" min="0" max="500"></div>
+      </div>
+      <div class="input-group">
+        <label>Customers Observed</label>
+        <div class="input-wrap"><span>n</span><input type="number" id="custInput" value="43" step="1" min="1" max="999"></div>
+      </div>
     </div>
   </div>
 </section>
@@ -267,22 +296,22 @@ footer strong{color:#64748b}
 <div class="kpi-row" id="kpiRow">
   <div class="kpi-card kpi-red">
     <div class="kpi-icon">&#9654;</div>
-    <div class="kpi-val" id="kpiUtil">39.2%</div>
+    <div class="kpi-val" id="kpiUtil">--</div>
     <div class="kpi-lbl">Utilization (&rho;)</div>
   </div>
   <div class="kpi-card kpi-blue">
     <div class="kpi-icon">&#9776;</div>
-    <div class="kpi-val" id="kpiLq">0.14</div>
+    <div class="kpi-val" id="kpiLq">--</div>
     <div class="kpi-lbl">Queue Length (Lq)</div>
   </div>
   <div class="kpi-card kpi-green">
     <div class="kpi-icon">&#9201;</div>
-    <div class="kpi-val" id="kpiWq">32</div>
-    <div class="kpi-lbl">Wait Time (Wq) sec</div>
+    <div class="kpi-val" id="kpiWq">--</div>
+    <div class="kpi-lbl">Wait Time (Wq)</div>
   </div>
   <div class="kpi-card kpi-amber">
     <div class="kpi-icon">&#36;</div>
-    <div class="kpi-val" id="kpiCost">20.63</div>
+    <div class="kpi-val" id="kpiCost">--</div>
     <div class="kpi-lbl">Total Cost $/hr</div>
   </div>
 </div>
@@ -295,9 +324,7 @@ footer strong{color:#64748b}
     <span class="tag tag-blue">with formulas &amp; explanations</span>
   </div>
   <div class="card">
-    <div class="step-grid" id="stepsContainer">
-      <!-- Steps will be rendered by JS -->
-    </div>
+    <div class="step-grid" id="stepsContainer"></div>
   </div>
 </section>
 
@@ -316,34 +343,34 @@ footer strong{color:#64748b}
         <thead>
           <tr>
             <th>Metric</th>
-            <th class="best">s=2<br>&lambda;=16</th>
-            <th>s=2<br>&lambda;=14</th>
-            <th>s=2<br>&lambda;=15</th>
-            <th>s=2<br>&lambda;=17</th>
-            <th>s=2<br>&lambda;=18</th>
-            <th>s=2<br>&lambda;=19</th>
-            <th>s=1<br>&lambda;=14</th>
+            <th class="best">s=2 &lambda;=16</th>
+            <th>s=2 &lambda;=14</th>
+            <th>s=2 &lambda;=15</th>
+            <th>s=2 &lambda;=17</th>
+            <th>s=2 &lambda;=18</th>
+            <th>s=2 &lambda;=19</th>
+            <th>s=1 &lambda;=14</th>
           </tr>
         </thead>
         <tbody>
-          <tr><td style="font-weight:600;text-align:left;padding-left:1rem">Utilization (&rho;)</td><td class="best">0.400</td><td>0.350</td><td>0.375</td><td>0.425</td><td>0.450</td><td>0.475</td><td>0.700</td></tr>
-          <tr><td style="font-weight:600;text-align:left;padding-left:1rem">Empty Prob (P&#8320;)</td><td class="best">0.429</td><td>0.481</td><td>0.455</td><td>0.404</td><td>0.379</td><td>0.356</td><td>0.300</td></tr>
-          <tr><td style="font-weight:600;text-align:left;padding-left:1rem">Queue Length (Lq)</td><td class="best">0.152</td><td>0.098</td><td>0.123</td><td>0.187</td><td>0.229</td><td>0.277</td><td>1.633</td></tr>
-          <tr><td style="font-weight:600;text-align:left;padding-left:1rem">System Length (L)</td><td class="best">0.952</td><td>0.798</td><td>0.873</td><td>1.037</td><td>1.129</td><td>1.227</td><td>2.333</td></tr>
-          <tr><td style="font-weight:600;text-align:left;padding-left:1rem">Queue Time (Wq) hr</td><td class="best">0.010</td><td>0.007</td><td>0.008</td><td>0.011</td><td>0.013</td><td>0.015</td><td>0.117</td></tr>
-          <tr><td style="font-weight:600;text-align:left;padding-left:1rem">System Time (W) hr</td><td class="best">0.060</td><td>0.057</td><td>0.058</td><td>0.061</td><td>0.063</td><td>0.065</td><td>0.167</td></tr>
-          <tr><td style="font-weight:600;text-align:left;padding-left:1rem">Wait Prob (Pw)</td><td class="best">0.229</td><td>0.181</td><td>0.205</td><td>0.254</td><td>0.279</td><td>0.306</td><td>0.700</td></tr>
+          <tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">Utilization (&rho;)</td><td class="best">0.400</td><td>0.350</td><td>0.375</td><td>0.425</td><td>0.450</td><td>0.475</td><td>0.700</td></tr>
+          <tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">Empty Prob (P&#8320;)</td><td class="best">0.429</td><td>0.481</td><td>0.455</td><td>0.404</td><td>0.379</td><td>0.356</td><td>0.300</td></tr>
+          <tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">Queue Length (Lq)</td><td class="best">0.152</td><td>0.098</td><td>0.123</td><td>0.187</td><td>0.229</td><td>0.277</td><td>1.633</td></tr>
+          <tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">System Length (L)</td><td class="best">0.952</td><td>0.798</td><td>0.873</td><td>1.037</td><td>1.129</td><td>1.227</td><td>2.333</td></tr>
+          <tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">Queue Time (Wq) min</td><td class="best">0.57</td><td>0.42</td><td>0.49</td><td>0.66</td><td>0.76</td><td>0.87</td><td>7.00</td></tr>
+          <tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">System Time (W) min</td><td class="best">3.57</td><td>3.42</td><td>3.49</td><td>3.66</td><td>3.76</td><td>3.87</td><td>10.00</td></tr>
+          <tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">Wait Prob (Pw)</td><td class="best">0.229</td><td>0.181</td><td>0.205</td><td>0.254</td><td>0.279</td><td>0.306</td><td>0.700</td></tr>
         </tbody>
       </table>
     </div>
     <div class="info-box green" style="margin-top:0.75rem">
-      <strong>&#9733; Insight:</strong> With 2 cashiers (s=2), queue length stays under 0.3 customers and wait time under 1 min across all &lambda; values. With only 1 cashier (s=1), queue grows to 1.6 customers and wait jumps to 7 min &mdash; unacceptable.
+      <strong>&#9733; Insight:</strong> With 2 cashiers (s=2), queue stays under 0.3 customers and wait under 1 min for all &lambda; values. With 1 cashier (s=1), queue hits 1.6 customers and wait jumps to 7 min &mdash; unacceptable.
     </div>
   </div>
 
-  <!-- COST COMPARISON -->
+  <!-- CHARTS -->
   <div class="card">
-    <div class="card-title">&#9670; Cost Comparison: s=1 vs s=2</div>
+    <div class="card-title">&#9670; Cost &amp; Wait Comparison: s=1 vs s=2</div>
     <div class="two-charts">
       <div class="chart-wrap"><canvas id="costChart"></canvas></div>
       <div class="chart-wrap"><canvas id="waitChart"></canvas></div>
@@ -352,13 +379,13 @@ footer strong{color:#64748b}
 
   <!-- VERDICT -->
   <div class="card" style="text-align:center">
-    <div class="verdict">
+    <div class="verdict" id="verdictBox">
       <h3>&#9733; Optimal Configuration</h3>
       <div class="big">s = 2</div>
-      <p style="margin-top:0.3rem">&lambda; = 16/hr &nbsp;|&nbsp; &mu; = 20/hr &nbsp;|&nbsp; Wait: 32 sec &nbsp;|&nbsp; Cost: $20.63/hr</p>
+      <p id="verdictText">&lambda; = 16/hr &nbsp;|&nbsp; &mu; = 20/hr &nbsp;|&nbsp; Utilization: 39% &nbsp;|&nbsp; Wait: 32 sec &nbsp;|&nbsp; Cost: $20.63/hr</p>
     </div>
     <div class="info-box blue" style="margin-top:1rem;text-align:left">
-      <strong>Why s=2?</strong> Adding a 2nd cashier ($8/hr) reduces waiting cost by $13.47/hr &mdash; net saving of $5.47/hr vs 1 cashier. Beyond 2, each extra cashier adds $8/hr but cuts wait cost by only $0.63/hr, a net loss.
+      <strong>Why s=2?</strong> Adding a 2nd cashier ($8/hr) reduces waiting cost by $13.47/hr &mdash; net saving of $5.47/hr vs 1 cashier. Beyond 2, each extra cashier adds $8/hr but cuts wait cost by only ~$0.63/hr, a net loss.
     </div>
   </div>
 </section>
@@ -367,15 +394,16 @@ footer strong{color:#64748b}
 
 <footer>
   <p><strong>M/M/s Queueing Calculator</strong> &bull; ITL304 Logistics Planning &amp; Modelling</p>
-  <p>Formulas based on the M/M/s queueing model &bull; Cost: $8/hr cashier + $5/hr per customer waiting</p>
+  <p>Interactive queueing theory model &bull; Adjust all parameters in real-time</p>
 </footer>
 
 <script>
 function fact(n){if(n<=1)return 1;let r=1;for(let i=2;i<=n;i++)r*=i;return r}
 
 function mmS(lam, mu, s) {
+  if (lam <= 0 || mu <= 0 || s < 1) return null;
   const rho = lam / (s * mu);
-  if (rho >= 1) return null;
+  if (rho >= 1) return { error: 'Unstable: &rho; >= 1. Queue grows forever. Increase s or decrease &lambda;/increase &mu;.' };
   let sum = 0;
   for (let n = 0; n < s; n++) sum += Math.pow(lam / mu, n) / fact(n);
   const last = Math.pow(lam / mu, s) / (fact(s) * (1 - rho));
@@ -385,208 +413,163 @@ function mmS(lam, mu, s) {
   const Wq_hr = Lq / lam;
   const W_hr = Wq_hr + 1 / mu;
   const Pw = Math.pow(lam / mu, s) / (fact(s) * (1 - rho)) * P0;
-  return {
-    rho, P0, Lq, L,
-    Wq_hr, W_hr,
-    Wq_min: Wq_hr * 60,
-    Wq_sec: Wq_hr * 3600,
-    W_min: W_hr * 60,
-    Pw
-  };
-}
-
-// Cost constants
-const SERVER_COST = 8;
-const WAIT_COST = 5;
-
-function getServerCost(s) { return s * SERVER_COST; }
-function getWaitCost(L) { return L * WAIT_COST; }
-function getTotalCost(s, L) { return getServerCost(s) + getWaitCost(L); }
-
-const stepDefs = [
-  {
-    title: "Raw Data",
-    formula: "43 customers in 161 min, 2 cashiers",
-    calc: () => "Service time avg = 2.04 min/customer",
-    result: () => "&lambda; = 16/hr, &mu; = 20.45/hr",
-    meaning: "Collected from Mart Sunday sheet. 43 customers served in 2h41m with 2 active cashiers."
-  },
-  {
-    title: "Arrival Rate (&lambda;)",
-    formula: "&lambda; = Customers &divide; Hours",
-    calc: (r) => `43 &divide; 2.683 = ${r ? (43/2.683).toFixed(2) : '16.02'} customers/hr`,
-    result: (r) => `<span class="val">${(r ? 43/2.683 : 16.02).toFixed(2)}</span> customers/hr`,
-    meaning: "About 1 person arrives every 3.7 minutes."
-  },
-  {
-    title: "Service Rate (&mu;)",
-    formula: "&mu; = 60 &divide; Avg Service Min (per cashier)",
-    calc: (r) => `60 &divide; 2.04 &divide; 2 = ${r ? (60/(87.9/43)/2).toFixed(2) : '20.45'} customers/hr`,
-    result: (r) => `<span class="val">${(r ? 60/(87.9/43)/2 : 20.45).toFixed(2)}</span> customers/hr`,
-    meaning: "Each cashier handles ~20 customers per hour (1 every ~2.9 min)."
-  },
-  {
-    title: "Utilization (&rho;)",
-    formula: "&rho; = &lambda; / (s &times; &mu;)",
-    calc: (r) => `${(r ? r.lam : 16.02)} &divide; (${(r ? r.s : 2)} &times; ${(r ? r.mu : 20.45)}) = ${(r ? r.rho : 0.3917).toFixed(4)}`,
-    result: (r) => `<span class="val">${((r ? r.rho : 0.3917) * 100).toFixed(1)}%</span>`,
-    meaning: "Cashiers are busy 39% of the time and idle 61% — low utilization, mart is not very crowded."
-  },
-  {
-    title: "Empty Probability (P&#8320;)",
-    formula: "P&#8320; = 1 / [&Sigma;(&lambda;/&mu;)<sup>n</sup>/n! + (&lambda;/&mu;)<sup>s</sup>/(s!(1-&rho;))]",
-    calc: (r) => {
-      const lam = r ? r.lam : 16.02, mu = r ? r.mu : 20.45, s = r ? r.s : 2;
-      const rho = r ? r.rho : 0.3917;
-      const a = Math.pow(lam/mu, 0)/fact(0);
-      const b = Math.pow(lam/mu, 1)/fact(1);
-      const c = Math.pow(lam/mu, s)/(fact(s)*(1-rho));
-      return `1 / (${a.toFixed(4)} + ${b.toFixed(4)} + ${c.toFixed(4)}) = ${(1/(a+b+c)).toFixed(4)}`;
-    },
-    result: (r) => {
-      const lam = r ? r.lam : 16.02, mu = r ? r.mu : 20.45, s = r ? r.s : 2;
-      const rho = r ? r.rho : 0.3917;
-      const a = Math.pow(lam/mu, 0)/fact(0);
-      const b = Math.pow(lam/mu, 1)/fact(1);
-      const c = Math.pow(lam/mu, s)/(fact(s)*(1-rho));
-      const P0 = 1/(a+b+c);
-      return `<span class="val">${(P0*100).toFixed(1)}%</span>`;
-    },
-    meaning: "43.7% chance the system is completely empty when you walk in — you often get immediate service."
-  },
-  {
-    title: "Queue Length (Lq)",
-    formula: "Lq = P&#8320; &times; (&lambda;/&mu;)<sup>s</sup> &times; &rho; / [s!(1-&rho;)<sup>2</sup>]",
-    calc: (r) => {
-      const lam = r ? r.lam : 16.02, mu = r ? r.mu : 20.45, s = r ? r.s : 2;
-      const rho = r ? r.rho : 0.3917;
-      const P0 = r ? r.P0 : 0.4371;
-      const val = P0 * Math.pow(lam/mu, s) * rho / (fact(s) * Math.pow(1-rho, 2));
-      return `= ${val.toFixed(4)} customers`;
-    },
-    result: (r) => {
-      const lam = r ? r.lam : 16.02, mu = r ? r.mu : 20.45, s = r ? r.s : 2;
-      const rho = r ? r.rho : 0.3917;
-      const P0 = r ? r.P0 : 0.4371;
-      const Lq = P0 * Math.pow(lam/mu, s) * rho / (fact(s) * Math.pow(1-rho, 2));
-      return `<span class="val">${Lq.toFixed(3)}</span> customers`;
-    },
-    meaning: "Almost nobody waits — 0.14 people on average in the queue."
-  },
-  {
-    title: "System Length (L)",
-    formula: "L = Lq + &lambda;/&mu;",
-    calc: (r) => {
-      const lam = r ? r.lam : 16.02, mu = r ? r.mu : 20.45;
-      const Lq = r ? r.Lq : 0.142;
-      return `${Lq.toFixed(3)} + ${(lam/mu).toFixed(3)} = ${(Lq + lam/mu).toFixed(3)} customers`;
-    },
-    result: (r) => {
-      const lam = r ? r.lam : 16.02, mu = r ? r.mu : 20.45;
-      const Lq = r ? r.Lq : 0.142;
-      const L = Lq + lam/mu;
-      return `<span class="val">${L.toFixed(3)}</span> customers`;
-    },
-    meaning: "Less than 1 person on average is inside the mart at any moment."
-  },
-  {
-    title: "Queue Wait Time (Wq) — Little's Law",
-    formula: "Wq = Lq / &lambda;",
-    calc: (r) => {
-      const lam = r ? r.lam : 16.02, Lq = r ? r.Lq : 0.142;
-      const Wq_hr = Lq / lam;
-      return `${Lq.toFixed(3)} &divide; ${lam.toFixed(2)} = ${Wq_hr.toFixed(4)} hr = ${(Wq_hr*3600).toFixed(0)} sec`;
-    },
-    result: (r) => {
-      const lam = r ? r.lam : 16.02, Lq = r ? r.Lq : 0.142;
-      const sec = Lq / lam * 3600;
-      return `<span class="val">${sec.toFixed(0)}</span> seconds`;
-    },
-    meaning: "You wait only about 32 seconds before a cashier serves you."
-  },
-  {
-    title: "Total Time in System (W)",
-    formula: "W = Wq + 1/&mu;",
-    calc: (r) => {
-      const mu = r ? r.mu : 20.45, lam = r ? r.lam : 16.02, Lq = r ? r.Lq : 0.142;
-      const Wq_hr = Lq / lam;
-      return `${Wq_hr.toFixed(4)} + ${(1/mu).toFixed(4)} = ${(Wq_hr + 1/mu).toFixed(4)} hr = ${((Wq_hr + 1/mu)*60).toFixed(2)} min`;
-    },
-    result: (r) => {
-      const mu = r ? r.mu : 20.45, lam = r ? r.lam : 16.02, Lq = r ? r.Lq : 0.142;
-      const min = (Lq/lam + 1/mu)*60;
-      return `<span class="val">${min.toFixed(2)}</span> minutes`;
-    },
-    meaning: "Total visit lasts ~3.5 minutes: 32 sec wait + ~2.9 min service."
-  },
-  {
-    title: "Probability of Waiting (Pw)",
-    formula: "Pw = (&lambda;/&mu;)<sup>s</sup> &times; P&#8320; / [s!(1-&rho;)]",
-    calc: (r) => {
-      const lam = r ? r.lam : 16.02, mu = r ? r.mu : 20.45, s = r ? r.s : 2;
-      const rho = r ? r.rho : 0.3917, P0 = r ? r.P0 : 0.4371;
-      const val = Math.pow(lam/mu, s) / (fact(s)*(1-rho)) * P0;
-      return `= ${val.toFixed(4)}`;
-    },
-    result: (r) => {
-      const lam = r ? r.lam : 16.02, mu = r ? r.mu : 20.45, s = r ? r.s : 2;
-      const rho = r ? r.rho : 0.3917, P0 = r ? r.P0 : 0.4371;
-      const val = Math.pow(lam/mu, s) / (fact(s)*(1-rho)) * P0;
-      return `<span class="val">${(val*100).toFixed(1)}%</span>`;
-    },
-    meaning: "Only 22% of arriving customers experience a wait. The rest walk straight to an open cashier."
-  }
-];
-
-function renderSteps(r) {
-  const container = document.getElementById('stepsContainer');
-  container.innerHTML = '';
-  stepDefs.forEach((def, i) => {
-    const step = document.createElement('div');
-    step.className = 'step-item';
-    const calcStr = typeof def.calc === 'function' ? def.calc(r) : def.calc;
-    const resultStr = typeof def.result === 'function' ? def.result(r) : def.result;
-    step.innerHTML = `
-      <div class="s-num">Step ${i+1}</div>
-      <h4>${def.title}</h4>
-      <div class="formula">${def.formula}</div>
-      <div style="font-size:0.78rem;color:var(--g600);margin:0.3rem 0">${calcStr}</div>
-      <div class="result">= ${resultStr}</div>
-      <div class="meaning">${def.meaning}</div>
-    `;
-    container.appendChild(step);
-  });
+  return { rho, P0, Lq, L, Wq_hr, W_hr, Wq_min: Wq_hr * 60, Wq_sec: Wq_hr * 3600, W_min: W_hr * 60, Pw };
 }
 
 function updateAll() {
   const lam = parseFloat(document.getElementById('lamInput').value) || 16;
   const mu = parseFloat(document.getElementById('muInput').value) || 20;
   const s = parseInt(document.getElementById('sInput').value) || 2;
+  const sc = parseFloat(document.getElementById('cashierCostInput').value) || 8;
+  const wc = parseFloat(document.getElementById('waitCostInput').value) || 5;
+  const n = parseInt(document.getElementById('custInput').value) || 43;
 
   const r = mmS(lam, mu, s);
-  if (!r) {
-    document.getElementById('kpiUtil').textContent = 'N/A';
-    document.getElementById('kpiLq').textContent = 'N/A';
-    document.getElementById('kpiWq').textContent = 'N/A';
-    document.getElementById('kpiCost').textContent = 'N/A';
-    renderSteps(null);
+
+  if (!r || r.error) {
+    const err = r ? r.error : 'Invalid input';
+    ['kpiUtil','kpiLq','kpiWq','kpiCost'].forEach(id => document.getElementById(id).textContent = '!');
+    document.getElementById('stepsContainer').innerHTML = `<div style="text-align:center;padding:2rem;color:var(--accent);font-weight:600">${err}</div>`;
     return;
   }
 
-  const totalCost = getTotalCost(s, r.L);
+  const totalCost = getTotalCost(s, r.L, sc, wc);
 
   document.getElementById('kpiUtil').textContent = (r.rho * 100).toFixed(1) + '%';
-  document.getElementById('kpiLq').textContent = r.Lq.toFixed(2);
-  document.getElementById('kpiWq').textContent = r.Wq_sec.toFixed(0);
-  document.getElementById('kpiCost').textContent = totalCost.toFixed(2);
+  document.getElementById('kpiLq').textContent = r.Lq.toFixed(3);
+  document.getElementById('kpiWq').innerHTML = r.Wq_min < 1 ? `${r.Wq_sec.toFixed(0)} sec` : `${r.Wq_min.toFixed(2)} min`;
+  document.getElementById('kpiCost').textContent = '$' + totalCost.toFixed(2);
 
-  // Update step colors
-  const utilColor = r.rho < 0.5 ? 'var(--green)' : r.rho < 0.8 ? 'var(--amber)' : 'var(--accent)';
-  const waitColor = r.Wq_min < 1 ? 'var(--green)' : r.Wq_min < 5 ? 'var(--amber)' : 'var(--accent)';
-  document.querySelectorAll('.kpi-card')[0].style.setProperty('--kpi-color', utilColor);
-  document.querySelectorAll('.kpi-card')[2].style.setProperty('--kpi-color', waitColor);
+  // Auto-detect best s for current lam, mu
+  let bestS = s;
+  let bestCost = Infinity;
+  for (let testS = 1; testS <= 10; testS++) {
+    const tr = mmS(lam, mu, testS);
+    if (tr && !tr.error) {
+      const tc = getTotalCost(testS, tr.L, sc, wc);
+      if (tc < bestCost) { bestCost = tc; bestS = testS; }
+    }
+  }
 
-  renderSteps({ lam, mu, s, rho: r.rho, P0: r.P0, Lq: r.Lq, L: r.L, Wq_hr: r.Wq_hr, W_hr: r.W_hr, Pw: r.Pw });
+  // Update verdict
+  const isOptimal = bestS === s;
+  const verdictBox = document.getElementById('verdictBox');
+  const verdictText = document.getElementById('verdictText');
+  verdictBox.style.borderColor = isOptimal ? 'var(--green)' : 'var(--amber)';
+  verdictBox.style.background = isOptimal
+    ? 'linear-gradient(135deg,var(--green-l),#f0fdf4)'
+    : 'linear-gradient(135deg,var(--amber-l),#fffbeb)';
+  verdictText.innerHTML = `&lambda; = ${lam}/hr &nbsp;|&nbsp; &mu; = ${mu}/hr &nbsp;|&nbsp; Utilization: ${(r.rho*100).toFixed(1)}% &nbsp;|&nbsp; Wait: ${r.Wq_sec.toFixed(0)} sec &nbsp;|&nbsp; Cost: $${totalCost.toFixed(2)}/hr`
+    + (isOptimal ? '' : `<br><span style="color:var(--accent2)">&#9654; Optimal s = ${bestS} (cost: $${bestCost.toFixed(2)}/hr)</span>`);
+
+  renderSteps(lam, mu, s, r, sc, wc, n);
+}
+
+function getTotalCost(s, L, sc, wc) {
+  return s * sc + L * wc;
+}
+
+const stepDefs = [
+  {
+    title: "Raw Data Summary",
+    formula: "Customers & divide; Minutes &times; 60 = rate",
+    calc: (lam, mu, s, r, sc, wc, n) => {
+      const hours = n / lam;
+      const mins = hours * 60;
+      return `${n} customers in ${mins.toFixed(0)} min with ${s} cashier${s>1?'s':''}`;
+    },
+    result: (lam, mu, s, r, sc, wc, n) => `&lambda;=&${lam ? '#' : '#'}x3bb;${lam}/hr, &mu;=${mu}/hr`,
+    meaning: (lam, mu, s, r, sc, wc, n) => `Observed ${n} customers. Service rate per cashier = ${mu}/hr.`
+  },
+  {
+    title: "Arrival Rate (&lambda;)",
+    formula: "&lambda; = Customers &divide; Observation Hours",
+    calc: (lam) => `${lam.toFixed(2)} customers/hr`,
+    result: (lam) => `<span class="val">${lam.toFixed(2)}</span> customers/hr`,
+    meaning: () => `About 1 person every ${(60/lam).toFixed(1)} minutes.`
+  },
+  {
+    title: "Service Rate (&mu;)",
+    formula: "&mu; = capacity per cashier per hour",
+    calc: (lam, mu) => `${mu.toFixed(2)} customers/hr per cashier`,
+    result: (lam, mu) => `<span class="val">${mu.toFixed(2)}</span> customers/hr`,
+    meaning: () => `Each cashier serves 1 customer every ${(60/mu).toFixed(1)} minutes.`
+  },
+  {
+    title: "Utilization (&rho;)",
+    formula: "&rho; = &lambda; / (s &times; &mu;)",
+    calc: (lam, mu, s, r) => `${lam.toFixed(2)} / (${s} &times; ${mu.toFixed(2)}) = ${r.rho.toFixed(4)}`,
+    result: (lam, mu, s, r) => `<span class="val">${(r.rho*100).toFixed(1)}%</span>`,
+    meaning: (lam, mu, s, r) => `${r.rho < 0.5 ? 'Low utilization. Cashiers are idle more than half the time.' : r.rho < 0.8 ? 'Moderate utilization.' : 'High utilization — risk of long queues.'}`
+  },
+  {
+    title: "Empty Probability (P&#8320;)",
+    formula: "P&#8320; = 1 / [&Sigma;(&lambda;/&mu;)<sup>n</sup>/n! + ...]",
+    calc: (lam, mu, s, r) => {
+      const a = Math.pow(lam/mu, 0)/fact(0);
+      const b = Math.pow(lam/mu, 1)/fact(1);
+      const c = Math.pow(lam/mu, s)/(fact(s)*(1-r.rho));
+      return `1 / (${a.toFixed(4)} + ${b.toFixed(4)} + ${c.toFixed(4)}) = ${r.P0.toFixed(4)}`;
+    },
+    result: (lam, mu, s, r) => `<span class="val">${(r.P0*100).toFixed(1)}%</span>`,
+    meaning: () => `Chance the system is completely empty when you walk in.`
+  },
+  {
+    title: "Queue Length (Lq)",
+    formula: "Lq = P&#8320; &times; (&lambda;/&mu;)<sup>s</sup> &times; &rho; / [s!(1-&rho;)<sup>2</sup>]",
+    calc: (lam, mu, s, r) => `${r.Lq.toFixed(4)} customers`,
+    result: (lam, mu, s, r) => `<span class="val">${r.Lq.toFixed(3)}</span> customers`,
+    meaning: () => `Average number of people waiting in line.`
+  },
+  {
+    title: "System Length (L)",
+    formula: "L = Lq + &lambda;/&mu;",
+    calc: (lam, mu, s, r) => `${r.Lq.toFixed(4)} + ${(lam/mu).toFixed(4)} = ${r.L.toFixed(4)} customers`,
+    result: (lam, mu, s, r) => `<span class="val">${r.L.toFixed(3)}</span> customers`,
+    meaning: () => `Total people in queue + being served.`
+  },
+  {
+    title: "Queue Wait Time (Wq)",
+    formula: "Wq = Lq / &lambda; (Little's Law)",
+    calc: (lam, mu, s, r) => `${r.Lq.toFixed(4)} / ${lam.toFixed(2)} = ${r.Wq_hr.toFixed(4)} hr = ${r.Wq_sec.toFixed(0)} sec`,
+    result: (lam, mu, s, r) => `<span class="val">${r.Wq_sec.toFixed(0)} sec</span>`,
+    meaning: () => `Average time spent waiting in queue before service.`
+  },
+  {
+    title: "Total Time in System (W)",
+    formula: "W = Wq + 1/&mu;",
+    calc: (lam, mu, s, r) => `${r.Wq_hr.toFixed(4)} + ${(1/mu).toFixed(4)} = ${r.W_hr.toFixed(4)} hr = ${r.W_min.toFixed(2)} min`,
+    result: (lam, mu, s, r) => `<span class="val">${r.W_min.toFixed(2)} min</span>`,
+    meaning: () => `Total visit time: wait + service.`
+  },
+  {
+    title: "Probability of Waiting (Pw)",
+    formula: "Pw = (&lambda;/&mu;)<sup>s</sup> &times; P&#8320; / [s!(1-&rho;)]",
+    calc: (lam, mu, s, r) => `= ${r.Pw.toFixed(4)}`,
+    result: (lam, mu, s, r) => `<span class="val">${(r.Pw*100).toFixed(1)}%</span>`,
+    meaning: (lam, mu, s, r) => `${(r.Pw*100).toFixed(0)}% of customers wait. ${((1-r.Pw)*100).toFixed(0)}% go straight to a cashier.`
+  }
+];
+
+function renderSteps(lam, mu, s, r, sc, wc, n) {
+  const container = document.getElementById('stepsContainer');
+  container.innerHTML = '';
+  stepDefs.forEach((def, i) => {
+    const step = document.createElement('div');
+    step.className = 'step-item';
+    const calcStr = def.calc(lam, mu, s, r, sc, wc, n);
+    const resultStr = def.result(lam, mu, s, r, sc, wc, n);
+    const meaningStr = def.meaning(lam, mu, s, r, sc, wc, n);
+    step.innerHTML = `
+      <div class="s-num">Step ${i+1}</div>
+      <h4>${def.title}</h4>
+      <div class="formula">${def.formula}</div>
+      <div class="calc-line">${calcStr}</div>
+      <div class="result">= ${resultStr}</div>
+      <div class="meaning">${meaningStr}</div>
+    `;
+    container.appendChild(step);
+  });
 }
 
 // Chart instances
@@ -619,8 +602,8 @@ function initCharts() {
     }
   });
 
-  const s2wait = [0.02, 0.04, 0.10, 0.20, 0.38, 0.68];
-  const s1wait = [3.84, 5.02, 6.67, 9.04, 12.34, 16.97];
+  const s2wait = [0.42, 0.49, 0.57, 0.66, 0.76, 0.87];
+  const s1wait = [7.00, 9.00, 12.00, 16.00, 22.00, 30.00];
 
   waitChart = new Chart(document.getElementById('waitChart'), {
     type: 'bar',
@@ -645,13 +628,16 @@ function initCharts() {
   });
 }
 
-// Input event listeners
+// Input listeners
 document.getElementById('lamInput').addEventListener('input', updateAll);
 document.getElementById('muInput').addEventListener('input', updateAll);
 document.getElementById('sInput').addEventListener('input', updateAll);
+document.getElementById('cashierCostInput').addEventListener('input', updateAll);
+document.getElementById('waitCostInput').addEventListener('input', updateAll);
+document.getElementById('custInput').addEventListener('input', updateAll);
 
-// Init
-renderSteps({ lam: 16.02, mu: 20.45, s: 2, rho: 0.3917, P0: 0.4371, Lq: 0.142, L: 0.925, Wq_hr: 0.0089, W_hr: 0.0578, Pw: 0.2205 });
+// Init with defaults
+updateAll();
 initCharts();
 </script>
 </body>
