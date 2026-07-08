@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Queueing Theory — M/M/s Economic Analysis</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',-apple-system,sans-serif;background:#f0f2f5;color:#1a1a2e;line-height:1.6}
+:root{--primary:#1a1a2e;--secondary:#16213e;--accent:#e94560;--blue:#0f3460;--green:#10b981;--gold:#f59e0b;--green-light:#d1fae5;--red-light:#fee2e2;--blue-light:#dbeafe;--gold-light:#fef3c7;--gray-50:#f8fafc;--gray-100:#f1f5f9;--gray-200:#e2e8f0;--gray-300:#cbd5e1;--gray-400:#94a3b8;--gray-500:#64748b;--gray-600:#475569;--shadow:0 1px 3px rgba(0,0,0,0.06);--shadow-lg:0 10px 40px rgba(0,0,0,0.12);--radius:16px;--radius-sm:10px}
+
+nav{background:var(--primary);padding:0 2rem;display:flex;align-items:center;gap:0.25rem;position:sticky;top:0;z-index:1000;height:60px}
+nav .logo{color:#fff;font-weight:800;font-size:1rem;display:flex;align-items:center;gap:0.5rem;margin-right:2rem}
+nav .logo .dot{width:10px;height:10px;background:var(--accent);border-radius:50%;display:inline-block;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+nav a{color:#94a3b8;text-decoration:none;font-size:0.76rem;font-weight:500;padding:0.4rem 1rem;border-radius:6px;transition:0.2s}
+nav a:hover{color:#fff;background:rgba(255,255,255,0.08)}
+nav a.active{color:#fff;background:var(--accent)}
+
+.hero{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 40%,#0f3460 100%);color:#fff;padding:4rem 2rem 5rem;text-align:center;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:60px;background:#f0f2f5;border-radius:50% 50% 0 0/100% 100% 0 0}
+.hero h1{font-size:2.4rem;font-weight:900;margin-bottom:0.75rem;line-height:1.1}
+.hero h1 span{color:var(--accent)}
+.hero p{font-size:0.95rem;color:#94a3b8;max-width:650px;margin:0 auto 2rem;line-height:1.7}
+
+.container{max-width:1100px;margin:-3rem auto 0;padding:0 1.5rem 3rem;position:relative;z-index:2}
+.section{margin-bottom:1.5rem}
+.section-header{margin-bottom:1rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.section-header .num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;font-size:0.85rem;font-weight:700;flex-shrink:0}
+.section-header h2{font-size:1.3rem;font-weight:800;color:var(--primary)}
+.section-header .tag{font-size:0.68rem;padding:0.25rem 0.8rem;border-radius:20px;font-weight:600}
+.tag-blue{background:var(--blue-light);color:#1e40af}
+.tag-green{background:var(--green-light);color:#065f46}
+.tag-red{background:var(--red-light);color:#991b1b}
+.tag-gold{background:var(--gold-light);color:#92400e}
+
+.card{background:#fff;border-radius:var(--radius);padding:1.5rem;margin-bottom:1rem;box-shadow:var(--shadow);border:1px solid var(--gray-200)}
+.card-title{font-size:1rem;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;gap:0.6rem}
+.card-title .icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.8rem;flex-shrink:0}
+
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:0.75rem}
+@media(max-width:900px){.grid-2,.grid-4{grid-template-columns:1fr}}
+@media(max-width:640px){.grid-3{grid-template-columns:1fr}}
+
+.kpi{background:var(--gray-50);border-radius:var(--radius-sm);padding:0.8rem 1rem;text-align:center;border:1px solid var(--gray-200)}
+.kpi .val{font-size:1.5rem;font-weight:800;line-height:1.2}
+.kpi .lbl{font-size:0.68rem;color:var(--gray-500);font-weight:500;text-transform:uppercase;letter-spacing:0.5px;margin-top:0.2rem}
+.kpi .sub{font-size:0.65rem;color:var(--gray-400)}
+.kpi-green .val{color:var(--green)}
+.kpi-red .val{color:var(--accent)}
+.kpi-blue .val{color:var(--blue)}
+.kpi-gold .val{color:var(--gold)}
+
+.step-box{background:var(--gray-50);border-radius:var(--radius-sm);padding:1.25rem;border:1px solid var(--gray-200);margin-bottom:0.75rem}
+.step-box h4{font-size:0.85rem;margin-bottom:0.5rem;color:var(--primary)}
+.step-box p{font-size:0.82rem;color:var(--gray-600);line-height:1.7}
+.step-box .highlight{background:#fff;padding:0.5rem 0.75rem;border-radius:6px;font-weight:600;font-size:0.85rem;display:inline-block;margin:0.3rem 0;border:1px solid var(--gray-200)}
+
+.formula{background:#fff;border-radius:6px;padding:0.6rem 0.8rem;font-family:'Courier New',monospace;font-size:0.8rem;border-left:3px solid var(--accent);margin:0.4rem 0;border:1px solid var(--gray-200)}
+
+table{width:100%;border-collapse:collapse;font-size:0.78rem}
+th{background:var(--gray-50);color:var(--gray-600);font-weight:600;padding:0.55rem 0.6rem;text-align:center;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.5px;border-bottom:2px solid var(--gray-200)}
+td{padding:0.5rem 0.6rem;text-align:center;border-bottom:1px solid var(--gray-100)}
+tr.best{background:var(--green-light)!important}
+tr.best td{font-weight:600;color:#065f46}
+.table-wrap{overflow-x:auto;border-radius:var(--radius-sm);border:1px solid var(--gray-200)}
+
+.chart-wrap{position:relative;height:280px;margin:0.5rem 0}
+
+.info-box{padding:0.8rem 1rem;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:0.5rem 0;font-size:0.8rem;line-height:1.6;border-left:4px solid}
+.info-box.blue{background:var(--blue-light);border-left-color:#3b82f6}
+.info-box.green{background:var(--green-light);border-left-color:var(--green)}
+.info-box.red{background:var(--red-light);border-left-color:var(--accent)}
+.info-box.gold{background:var(--gold-light);border-left-color:var(--gold)}
+
+.reco{background:linear-gradient(135deg,var(--green-light),#f0fdf4);border:2px solid var(--green);border-radius:var(--radius);padding:1.5rem;text-align:center;margin-top:0.75rem}
+.reco .big{font-size:2.5rem;font-weight:900;color:var(--green);line-height:1.2}
+.reco p{color:#065f46;font-size:0.85rem}
+
+footer{background:var(--primary);color:#475569;text-align:center;padding:2.5rem 2rem;font-size:0.75rem;line-height:1.8}
+
+.pipeline{display:flex;align-items:center;justify-content:center;gap:0;padding:1rem 0;flex-wrap:nowrap;overflow-x:auto}
+.p-box{padding:0.5rem 1rem;border-radius:var(--radius-sm);font-weight:600;font-size:0.72rem;text-align:center;white-space:nowrap;min-width:70px}
+.p-arrow{font-size:1.1rem;color:var(--gray-400);padding:0 0.2rem;flex-shrink:0}
+
+.two-charts{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:900px){.two-charts{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo"><span class="dot"></span> M/M/s Analyzer</div>
+  <a href="#step1">Data</a>
+  <a href="#step2">&lambda; & &mu;</a>
+  <a href="#step3">Costs</a>
+  <a href="#step4">M/M/s</a>
+  <a href="#step5" class="active">Analysis</a>
+  <a href="#step6">Result</a>
+</nav>
+
+<div class="hero">
+  <h1>Queueing Theory &mdash; <span>Economic Analysis</span></h1>
+  <p>M/M/s queueing model applied to Mart cashier optimization.<br>Sunday (&lambda;=16.02/hr) &amp; Friday (&lambda;=13.62/hr) with full cost analysis.</p>
+</div>
+
+<div class="container">
+
+<!-- ============================================================ -->
+<!-- SYSTEM FLOW -->
+<!-- ============================================================ -->
+<section class="section">
+  <div class="card" style="text-align:center;padding:1.2rem 1.5rem">
+    <div class="card-title" style="justify-content:center;margin-bottom:0.5rem">
+      <span class="icon" style="background:var(--primary)">&#9654;</span> M/M/s Queueing System Flow
+    </div>
+    <div class="pipeline">
+      <span class="p-box" style="background:var(--red-light);border:2px solid #ef4444;color:#991b1b">
+        &#9654; Arrivals<br><small>&lambda; = 13-16/hr</small>
+      </span>
+      <span class="p-arrow">&rarr;</span>
+      <span class="p-box" style="background:var(--gold-light);border:2px solid #f59e0b;color:#92400e">
+        Queue<br><small>FIFO, infinite</small>
+      </span>
+      <span class="p-arrow">&rarr;</span>
+      <span class="p-box" style="background:var(--blue-light);border:2px solid #60a5fa;color:#1e40af">
+        Server 1<br><small>&mu; = 20/hr</small>
+      </span>
+      <span class="p-box" style="background:var(--blue-light);border:2px solid #60a5fa;color:#1e40af">
+        Server 2<br><small>&mu; = 20/hr</small>
+      </span>
+      <span class="p-arrow">&rarr;</span>
+      <span class="p-box" style="background:var(--green-light);border:2px solid #10b981;color:#065f46">
+        &#10003; Depart
+      </span>
+    </div>
+    <div class="info-box blue" style="margin:0.5rem auto 0;max-width:500px;font-size:0.75rem;text-align:left">
+      <strong>Key:</strong> &lambda; = arrival rate (customers/hr) &nbsp;|&nbsp; &mu; = service rate per server &nbsp;|&nbsp; s = number of servers
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- STEP 1: RAW DATA SUMMARY -->
+<!-- ============================================================ -->
+<section id="step1" class="section">
+  <div class="section-header">
+    <span class="num">1</span>
+    <h2>Raw Data Summary</h2>
+    <span class="tag tag-blue">from Mart timeline sheets</span>
+  </div>
+  <div class="card">
+    <div class="grid-2">
+      <div class="step-box" style="border-left:4px solid var(--accent)">
+        <h4>&#9632; Sunday</h4>
+        <div class="grid-3" style="margin-top:0.5rem">
+          <div class="kpi kpi-red"><div class="val">43</div><div class="lbl">Customers</div></div>
+          <div class="kpi kpi-blue"><div class="val">161</div><div class="lbl">Minutes</div></div>
+          <div class="kpi kpi-green"><div class="val">87.9</div><div class="lbl">Service Min</div></div>
+        </div>
+        <p style="font-size:0.78rem;margin-top:0.3rem">12:01 PM &ndash; 2:42 PM &bull; 2 cashiers operating</p>
+      </div>
+      <div class="step-box" style="border-left:4px solid var(--blue)">
+        <h4>&#9738; Friday</h4>
+        <div class="grid-3" style="margin-top:0.5rem">
+          <div class="kpi kpi-red"><div class="val">32</div><div class="lbl">Customers</div></div>
+          <div class="kpi kpi-blue"><div class="val">141</div><div class="lbl">Minutes</div></div>
+          <div class="kpi kpi-green"><div class="val">86.25</div><div class="lbl">Service Min</div></div>
+        </div>
+        <p style="font-size:0.78rem;margin-top:0.3rem">10:15 AM &ndash; 12:36 PM &bull; 2 cashiers operating</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- STEP 2: CALCULATE &lambda; AND &mu; -->
+<!-- ============================================================ -->
+<section id="step2" class="section">
+  <div class="section-header">
+    <span class="num">2</span>
+    <h2>Calculate &lambda; (Arrival Rate) and &mu; (Service Rate)</h2>
+    <span class="tag tag-blue">from raw data</span>
+  </div>
+  <div class="card">
+    <div class="grid-2">
+      <div class="step-box">
+        <h4>&#9654; &lambda; = Arrival Rate</h4>
+        <div class="formula">&lambda; = Customers Observed &divide; Observation Hours</div>
+        <div class="highlight">Sunday: 43 &divide; (161/60) = <strong>16.02 customers/hr</strong></div>
+        <div class="highlight">Friday: 32 &divide; (141/60) = <strong>13.62 customers/hr</strong></div>
+        <p>Sunday is ~18% busier than Friday.</p>
+      </div>
+      <div class="step-box">
+        <h4>&#9654; &mu; = Service Rate (per cashier)</h4>
+        <p>Avg service time:</p>
+        <div class="highlight">Sunday: 87.9 / 43 = <strong>2.04 min</strong> &rarr; &mu; = 60/2.04/2 = <strong>20.45/hr</strong></div>
+        <div class="highlight">Friday: 86.25 / 32 = <strong>2.70 min</strong> &rarr; &mu; = 60/2.70/2 = <strong>20.00/hr</strong></div>
+        <p style="font-size:0.78rem;margin-top:0.3rem">&mu; accounts for 2 cashiers sharing the load.</p>
+      </div>
+    </div>
+    <div class="info-box blue" style="margin-top:0.75rem">
+      <strong>&#9881; Summary:</strong> Sunday: &lambda; = <strong>16.02</strong>/hr, &mu; = <strong>20.45</strong>/hr &nbsp;|&nbsp; Friday: &lambda; = <strong>13.62</strong>/hr, &mu; = <strong>20.00</strong>/hr &nbsp;|&nbsp; Currently <strong>2 cashiers</strong>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- STEP 3: COST ASSUMPTIONS -->
+<!-- ============================================================ -->
+<section id="step3" class="section">
+  <div class="section-header">
+    <span class="num">3</span>
+    <h2>Cost Assumptions</h2>
+    <span class="tag tag-green">economic analysis parameters</span>
+  </div>
+  <div class="card">
+    <div class="grid-2">
+      <div class="step-box">
+        <h4>&#36; Cashier Cost = $100/hr</h4>
+        <p>Includes wages, benefits, training, and overhead. Based on industry standard for retail cashier operations in Cambodia (2026).</p>
+      </div>
+      <div class="step-box">
+        <h4>&#36; Customer Waiting Cost = $120/hr</h4>
+        <p>Customers waiting in system represent lost opportunity cost. Includes cart abandonment, reduced repeat visits, and negative word-of-mouth.</p>
+      </div>
+    </div>
+    <div style="background:var(--gray-50);border-radius:var(--radius-sm);padding:0.8rem 1rem;margin-top:0.5rem">
+      <div style="font-weight:600;font-size:0.85rem">Total Cost Formula:</div>
+      <div class="formula" style="margin:0.3rem 0">Total Cost = s &times; $100 + L &times; $120</div>
+      <p style="font-size:0.75rem;color:var(--gray-500)">where s = number of cashiers, L = average customers in system</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- STEP 4: M/M/s MODEL -->
+<!-- ============================================================ -->
+<section id="step4" class="section">
+  <div class="section-header">
+    <span class="num">4</span>
+    <h2>M/M/s Queueing Model</h2>
+    <span class="tag tag-blue">core formulas</span>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="icon" style="background:var(--blue)">&#9670;</span> Model Formulation</div>
+    <div class="grid-2">
+      <div class="step-box"><h4>Utilization (&rho;)</h4><div class="formula">&rho; = &lambda; / (s &times; &mu;)</div><p>Must be &lt; 1 for stability.</p></div>
+      <div class="step-box"><h4>Empty Prob (P&#8320;)</h4><div class="formula">P&#8320; = 1 / [&Sigma;(&lambda;/&mu;)<sup>n</sup>/n! + (&lambda;/&mu;)<sup>s</sup>/(s!(1-&rho;))]</div></div>
+      <div class="step-box"><h4>Queue Length (Lq)</h4><div class="formula">Lq = P&#8320; &times; (&lambda;/&mu;)<sup>s</sup> &times; &rho; / [s!(1-&rho;)<sup>2</sup>]</div></div>
+      <div class="step-box"><h4>System Length (L)</h4><div class="formula">L = Lq + &lambda;/&mu;</div></div>
+      <div class="step-box"><h4>Queue Time (Wq)</h4><div class="formula">Wq = Lq / &lambda; (Little's Law)</div></div>
+      <div class="step-box"><h4>System Time (W)</h4><div class="formula">W = Wq + 1/&mu;</div></div>
+    </div>
+    <div class="info-box blue"><strong>Assumptions:</strong> Poisson arrivals, exponential service times, infinite queue, FCFS discipline, s identical servers.</div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- STEP 5: ECONOMIC ANALYSIS -->
+<!-- ============================================================ -->
+<section id="step5" class="section">
+  <div class="section-header">
+    <span class="num">5</span>
+    <h2>Economic Analysis &mdash; s = 1 to 8</h2>
+    <span class="tag tag-green">find minimum total cost</span>
+  </div>
+
+  <!-- SUNDAY -->
+  <div class="card">
+    <div class="card-title"><span class="icon" style="background:var(--accent)">&#9632;</span> Sunday Results (&lambda;=16.02, &mu;=20.45)</div>
+    <div class="table-wrap">
+      <table>
+        <tr>
+          <th>s</th><th>&rho;</th><th>Lq</th><th>Wq (min)</th><th>W (min)</th><th>Pw</th>
+          <th>Server $</th><th>Wait $</th><th>Total $</th>
+        </tr>
+        <tr><td>1</td><td>78.3%</td><td>2.83</td><td>10.61</td><td>13.55</td><td>78.4%</td><td>100</td><td>434.15</td><td><strong>534.15</strong></td></tr>
+        <tr class="best"><td>2</td><td>39.2%</td><td>0.14</td><td>0.53</td><td>3.47</td><td>22.1%</td><td>200</td><td>111.06</td><td><strong>311.06</strong></td></tr>
+        <tr><td>3</td><td>26.1%</td><td>0.02</td><td>0.07</td><td>3.00</td><td>4.9%</td><td>300</td><td>96.11</td><td><strong>396.11</strong></td></tr>
+        <tr><td>4</td><td>19.6%</td><td>0.00</td><td>0.01</td><td>2.94</td><td>0.9%</td><td>400</td><td>94.27</td><td><strong>494.27</strong></td></tr>
+        <tr><td>5</td><td>15.7%</td><td>0.00</td><td>0.00</td><td>2.93</td><td>0.1%</td><td>500</td><td>94.04</td><td><strong>594.04</strong></td></tr>
+        <tr><td>6</td><td>13.1%</td><td>0.00</td><td>0.00</td><td>2.93</td><td>0.0%</td><td>600</td><td>94.02</td><td><strong>694.02</strong></td></tr>
+        <tr><td>7</td><td>11.2%</td><td>0.00</td><td>0.00</td><td>2.93</td><td>0.0%</td><td>700</td><td>94.01</td><td><strong>794.01</strong></td></tr>
+        <tr><td>8</td><td>9.8%</td><td>0.00</td><td>0.00</td><td>2.93</td><td>0.0%</td><td>800</td><td>94.01</td><td><strong>894.01</strong></td></tr>
+      </table>
+    </div>
+    <div style="margin-top:0.5rem"><strong style="color:var(--green)">&#9733; Optimal: s=2 &rarr; $311.06/hr</strong> &bull; Wait: 32 sec</div>
+  </div>
+
+  <!-- FRIDAY -->
+  <div class="card">
+    <div class="card-title"><span class="icon" style="background:var(--blue)">&#9738;</span> Friday Results (&lambda;=13.62, &mu;=20.00)</div>
+    <div class="table-wrap">
+      <table>
+        <tr>
+          <th>s</th><th>&rho;</th><th>Lq</th><th>Wq (min)</th><th>W (min)</th><th>Pw</th>
+          <th>Server $</th><th>Wait $</th><th>Total $</th>
+        </tr>
+        <tr><td>1</td><td>68.1%</td><td>1.45</td><td>6.40</td><td>9.40</td><td>68.1%</td><td>100</td><td>256.00</td><td><strong>356.00</strong></td></tr>
+        <tr class="best"><td>2</td><td>34.0%</td><td>0.09</td><td>0.39</td><td>3.39</td><td>17.3%</td><td>200</td><td>92.41</td><td><strong>292.41</strong></td></tr>
+        <tr><td>3</td><td>22.7%</td><td>0.01</td><td>0.04</td><td>3.04</td><td>3.4%</td><td>300</td><td>82.91</td><td><strong>382.91</strong></td></tr>
+        <tr><td>4</td><td>17.0%</td><td>0.00</td><td>0.00</td><td>3.00</td><td>0.6%</td><td>400</td><td>81.84</td><td><strong>481.84</strong></td></tr>
+        <tr><td>5</td><td>13.6%</td><td>0.00</td><td>0.00</td><td>3.00</td><td>0.1%</td><td>500</td><td>81.72</td><td><strong>581.72</strong></td></tr>
+        <tr><td>6</td><td>11.4%</td><td>0.00</td><td>0.00</td><td>3.00</td><td>0.0%</td><td>600</td><td>81.70</td><td><strong>681.70</strong></td></tr>
+        <tr><td>7</td><td>9.7%</td><td>0.00</td><td>0.00</td><td>3.00</td><td>0.0%</td><td>700</td><td>81.70</td><td><strong>781.70</strong></td></tr>
+        <tr><td>8</td><td>8.5%</td><td>0.00</td><td>0.00</td><td>3.00</td><td>0.0%</td><td>800</td><td>81.70</td><td><strong>881.70</strong></td></tr>
+      </table>
+    </div>
+    <div style="margin-top:0.5rem"><strong style="color:var(--green)">&#9733; Optimal: s=2 &rarr; $292.41/hr</strong> &bull; Wait: 23 sec</div>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="card">
+    <div class="card-title"><span class="icon" style="background:var(--gold)">&#9670;</span> Cost Comparison Charts</div>
+    <div class="two-charts">
+      <div class="chart-wrap"><canvas id="sunChart"></canvas></div>
+      <div class="chart-wrap"><canvas id="friChart"></canvas></div>
+    </div>
+    <div class="chart-wrap" style="height:300px;margin-top:0.5rem"><canvas id="compChart"></canvas></div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- STEP 6: FINAL RECOMMENDATION -->
+<!-- ============================================================ -->
+<section id="step6" class="section">
+  <div class="section-header">
+    <span class="num">6</span>
+    <h2>Final Recommendation</h2>
+    <span class="tag tag-green">conclusion</span>
+  </div>
+
+  <div class="card">
+    <div class="reco">
+      <h3>&#9733; Optimal Number of Cashiers = 2</h3>
+      <div class="big">2</div>
+      <p>Sunday: <strong>$311.06/hr</strong> &nbsp;|&nbsp; Friday: <strong>$292.41/hr</strong></p>
+      <p>Wait time: &lt; 1 minute for both days</p>
+    </div>
+
+    <div class="grid-3" style="margin-top:1rem">
+      <div class="step-box" style="background:var(--red-light);border-color:#fca5a5">
+        <h4 style="color:#991b1b">&#10060; s=1 (too few)</h4>
+        <p style="font-size:0.78rem">Utilization = 68-78%. Wait = <strong>6-11 min</strong>. Customers likely abandon. Cost = <strong>$356-534/hr</strong>. High lost revenue.</p>
+      </div>
+      <div class="step-box" style="background:var(--green-light);border-color:var(--green)">
+        <h4 style="color:#065f46">&#9989; s=2 (optimal)</h4>
+        <p style="font-size:0.78rem">Utilization = 34-39%. Wait = <strong>23-32 sec</strong>. Excellent service. Cost = <strong>$292-311/hr</strong>. Best balance.</p>
+      </div>
+      <div class="step-box" style="background:var(--gold-light);border-color:var(--gold)">
+        <h4 style="color:#92400e">&#9654; s=3+ (too many)</h4>
+        <p style="font-size:0.78rem">Wait near zero but each extra cashier costs <strong>$100/hr</strong> with minimal wait savings. Cost jumps to <strong>$382-894/hr</strong>.</p>
+      </div>
+    </div>
+
+    <div class="info-box green" style="margin-top:0.75rem">
+      <strong>&#9733; Key Insight:</strong> The 2nd cashier adds $100/hr cost but reduces waiting cost by <strong>$323-145/hr</strong>. Net saving of <strong>$223/hr (Sunday)</strong> and <strong>$63/hr (Friday)</strong>. Beyond 2 cashiers, each addition is a net loss.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="grid-4" style="text-align:center">
+      <div class="kpi kpi-red"><div class="val">13-16</div><div class="lbl">&lambda; (/hr)</div><div class="sub">Arrival rate range</div></div>
+      <div class="kpi kpi-blue"><div class="val">20</div><div class="lbl">&mu; (/hr)</div><div class="sub">Service rate per server</div></div>
+      <div class="kpi kpi-green"><div class="val">2</div><div class="lbl">Optimal s</div><div class="sub">Number of cashiers</div></div>
+      <div class="kpi kpi-gold"><div class="val">&lt; 1</div><div class="lbl">Wait (min)</div><div class="sub">Time in queue</div></div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  <p>Queueing Theory &mdash; M/M/s Economic Analysis &bull; ITL304 Logistics Planning &amp; Modelling</p>
+  <p>Data from Mart Sunday (43 customers) &amp; Friday (32 customers) &bull; Cost: $100/hr cashier, $120/hr waiting</p>
+</footer>
+
+<script>
+Chart.defaults.font.family="'Inter',sans-serif";
+Chart.defaults.font.size=11;
+
+function fact(n){if(n<=1)return 1;let r=1;for(let i=2;i<=n;i++)r*=i;return r}
+function mmS(lam,mu,s){const rho=lam/(s*mu);if(rho>=1)return null;let sum=0;for(let n=0;n<s;n++)sum+=Math.pow(lam/mu,n)/fact(n);const last=Math.pow(lam/mu,s)/(fact(s)*(1-rho));const P0=1/(sum+last);const Lq=P0*Math.pow(lam/mu,s)*rho/(fact(s)*Math.pow(1-rho,2));const L=Lq+lam/mu;const Wq=Lq/lam;const W=Wq+1/mu;const Pw=Math.pow(lam/mu,s)/(fact(s)*(1-rho))*P0;return{rho,P0,Lq,L,Wq_min:Wq*60,W_min:W*60,Pw}}
+
+const barColors = ctx => {
+  const i = ctx.dataIndex;
+  return i === 1 ? '#10b981' : '#94a3b8';
+};
+
+new Chart(document.getElementById('sunChart'), {
+  type:'bar',
+  data:{
+    labels:['1','2★','3','4','5','6','7','8'],
+    datasets:[{
+      label:'Total Cost ($/hr)',
+      data:[534.15,311.06,396.11,494.27,594.04,694.02,794.01,894.01],
+      backgroundColor:barColors,
+      borderRadius:4
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},title:{display:true,text:'Sunday: Total Cost by # Cashiers',font:{size:12}}},
+    scales:{y:{beginAtZero:true,title:{display:true,text:'$/hr'},grid:{color:'#f1f5f9'}}}
+  }
+});
+
+new Chart(document.getElementById('friChart'), {
+  type:'bar',
+  data:{
+    labels:['1','2★','3','4','5','6','7','8'],
+    datasets:[{
+      label:'Total Cost ($/hr)',
+      data:[356.00,292.41,382.91,481.84,581.72,681.70,781.70,881.70],
+      backgroundColor:barColors,
+      borderRadius:4
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},title:{display:true,text:'Friday: Total Cost by # Cashiers',font:{size:12}}},
+    scales:{y:{beginAtZero:true,title:{display:true,text:'$/hr'},grid:{color:'#f1f5f9'}}}
+  }
+});
+
+new Chart(document.getElementById('compChart'), {
+  type:'bar',
+  data:{
+    labels:['1 Cashier','2 Cashiers ★','3 Cashiers','4 Cashiers','5 Cashiers'],
+    datasets:[
+      {label:'Sunday Total Cost',data:[534.15,311.06,396.11,494.27,594.04],backgroundColor:['#fca5a5','#10b981','#93c5fd','#93c5fd','#93c5fd'],borderRadius:4},
+      {label:'Friday Total Cost',data:[356.00,292.41,382.91,481.84,581.72],backgroundColor:['#fca5a5','#10b981','#93c5fd','#93c5fd','#93c5fd'],borderRadius:4}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{position:'top',labels:{boxWidth:12,padding:16}},
+      tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': $'+ctx.raw+'/hr'}},
+      title:{display:true,text:'Sunday vs Friday — Cost Comparison',font:{size:13}}
+    },
+    scales:{y:{beginAtZero:true,title:{display:true,text:'Cost ($/hr)'},grid:{color:'#f1f5f9'}}}
+  }
+});
+</script>
+</body>
+</html>
