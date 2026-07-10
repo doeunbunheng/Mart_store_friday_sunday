@@ -372,18 +372,16 @@ footer strong{color:#64748b}
   </div>
 
   <div class="two-c" id="stepsGrid">
-    <!-- Left: Sunday -->
     <div>
       <div class="card" style="border-left:4px solid var(--a)">
-        <div class="ct">&#9632; Sunday Results (&lambda;=16.02, &mu;=20.45)</div>
-        <div id="stepsSun"></div>
+        <div class="ct">&#9632; Current Input Results (<span id="stepsTitleLeft"></span>)</div>
+        <div id="stepsLeft"></div>
       </div>
     </div>
-    <!-- Right: Friday -->
     <div>
       <div class="card" style="border-left:4px solid #3b82f6">
-        <div class="ct">&#9632; Friday Results (&lambda;=13.62, &mu;=20.00)</div>
-        <div id="stepsFri"></div>
+        <div class="ct">&#9632; s=1 Comparison (<span id="stepsTitleRight"></span>)</div>
+        <div id="stepsRight"></div>
       </div>
     </div>
   </div>
@@ -398,34 +396,12 @@ footer strong{color:#64748b}
   </div>
 
   <div class="card">
-    <div class="ct">&#9654; Metrics Comparison: s=2 (&lambda;=14&ndash;19) vs s=1 (&lambda;=14)</div>
+    <div class="ct">&#9654; Metrics Comparison: s=<span id="scCurS">2</span> vs s=1 around &lambda;=<span id="scCurLam">16</span></div>
     <div class="tw">
-      <table>
-        <thead>
-          <tr>
-            <th>Metric</th>
-            <th class="br">s=2 &lambda;=16</th>
-            <th>s=2 &lambda;=14</th>
-            <th>s=2 &lambda;=15</th>
-            <th>s=2 &lambda;=17</th>
-            <th>s=2 &lambda;=18</th>
-            <th>s=2 &lambda;=19</th>
-            <th>s=1 &lambda;=14</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">Utilization (&rho;)</td><td class="br">0.400</td><td>0.350</td><td>0.375</td><td>0.425</td><td>0.450</td><td>0.475</td><td>0.700</td></tr>
-          <tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">Empty Prob (P&#8320;)</td><td class="br">0.429</td><td>0.481</td><td>0.455</td><td>0.404</td><td>0.379</td><td>0.356</td><td>0.300</td></tr>
-          <tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">Queue Length (Lq)</td><td class="br">0.152</td><td>0.098</td><td>0.123</td><td>0.187</td><td>0.229</td><td>0.277</td><td>1.633</td></tr>
-          <tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">System Length (L)</td><td class="br">0.952</td><td>0.798</td><td>0.873</td><td>1.037</td><td>1.129</td><td>1.227</td><td>2.333</td></tr>
-          <tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">Queue Time (Wq) min</td><td class="br">0.57</td><td>0.42</td><td>0.49</td><td>0.66</td><td>0.76</td><td>0.87</td><td>7.00</td></tr>
-          <tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">System Time (W) min</td><td class="br">3.57</td><td>3.42</td><td>3.49</td><td>3.66</td><td>3.76</td><td>3.87</td><td>10.00</td></tr>
-          <tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">Wait Prob (Pw)</td><td class="br">0.229</td><td>0.181</td><td>0.205</td><td>0.254</td><td>0.279</td><td>0.306</td><td>0.700</td></tr>
-        </tbody>
-      </table>
+      <div id="scenarioTableContainer"></div>
     </div>
-    <div class="info-box green" style="margin-top:0.75rem">
-      <strong>&#9733; Key Insight:</strong> With s=2, queue stays under 0.3 customers and wait under 1 min for all &lambda; values. With s=1, queue hits 1.6 customers and wait jumps to 7 min &mdash; unacceptable for customer satisfaction.
+    <div class="info-box green" style="margin-top:0.75rem" id="scenarioInsight">
+      <strong>&#9733; Key Insight:</strong> Loading...
     </div>
   </div>
 </section>
@@ -442,33 +418,17 @@ footer strong{color:#64748b}
     <div class="card" style="border-left:4px solid var(--a)">
       <div class="ct">&#9632; Sunday &mdash; Cost by # Cashiers (&lambda;=16.02, &mu;=20.45)</div>
       <div class="tw">
-        <table>
-          <thead><tr><th>s</th><th>&rho;</th><th>Lq</th><th>Wq (min)</th><th>Server $</th><th>Wait $</th><th>Total $</th></tr></thead>
-          <tbody>
-            <tr><td>1</td><td>78.4%</td><td>2.83</td><td>10.61</td><td>$1.09</td><td>$3.62</td><td><strong>$4.71</strong></td></tr>
-            <tr class="br"><td>2</td><td>39.2%</td><td>0.14</td><td>0.53</td><td>$2.19</td><td>$0.93</td><td><strong>$3.12</strong></td></tr>
-            <tr><td>3</td><td>26.1%</td><td>0.02</td><td>0.07</td><td>$3.28</td><td>$0.80</td><td><strong>$4.08</strong></td></tr>
-            <tr><td>4</td><td>19.6%</td><td>0.00</td><td>0.01</td><td>$4.37</td><td>$0.79</td><td><strong>$5.16</strong></td></tr>
-          </tbody>
-        </table>
+        <div id="econSun"></div>
       </div>
-      <div class="info-box green" style="margin-top:0.5rem"><strong>&#9733; s=2 Optimal: $3.12/hr</strong> &mdash; Wait: 32 sec</div>
+      <div class="info-box green" style="margin-top:0.5rem" id="econSunOpt"></div>
     </div>
 
     <div class="card" style="border-left:4px solid #3b82f6">
       <div class="ct">&#9632; Friday &mdash; Cost by # Cashiers (&lambda;=13.62, &mu;=20.00)</div>
       <div class="tw">
-        <table>
-          <thead><tr><th>s</th><th>&rho;</th><th>Lq</th><th>Wq (min)</th><th>Server $</th><th>Wait $</th><th>Total $</th></tr></thead>
-          <tbody>
-            <tr><td>1</td><td>68.1%</td><td>1.46</td><td>6.42</td><td>$1.09</td><td>$2.14</td><td><strong>$3.23</strong></td></tr>
-            <tr class="br"><td>2</td><td>34.0%</td><td>0.09</td><td>0.39</td><td>$2.19</td><td>$0.77</td><td><strong>$2.96</strong></td></tr>
-            <tr><td>3</td><td>22.7%</td><td>0.01</td><td>0.04</td><td>$3.28</td><td>$0.69</td><td><strong>$3.97</strong></td></tr>
-            <tr><td>4</td><td>17.0%</td><td>0.00</td><td>0.01</td><td>$4.37</td><td>$0.68</td><td><strong>$5.05</strong></td></tr>
-          </tbody>
-        </table>
+        <div id="econFri"></div>
       </div>
-      <div class="info-box green" style="margin-top:0.5rem"><strong>&#9733; s=2 Optimal: $2.96/hr</strong> &mdash; Wait: 23 sec</div>
+      <div class="info-box green" style="margin-top:0.5rem" id="econFriOpt"></div>
     </div>
   </div>
 
@@ -485,11 +445,11 @@ footer strong{color:#64748b}
   <div class="card" style="text-align:center">
     <div class="vd">
       <h3>&#9733; Final Recommendation</h3>
-      <div class="big">s = 2</div>
-      <p>Optimal for both Sunday &amp; Friday &bull; Wait &lt; 1 minute &bull; Lowest total cost</p>
+      <div class="big" id="verdictOptimal">s = ?</div>
+      <p id="verdictDesc">Adjust inputs above to see optimal cashier count.</p>
     </div>
-    <div class="info-box blue" style="margin-top:1rem;text-align:left">
-      <strong>Why s=2?</strong> The 2nd cashier (+$1.09/hr) reduces waiting cost by <strong>$2.69/hr (Sun)</strong> and <strong>$1.37/hr (Fri)</strong> &mdash; a positive ROI. Beyond 2, each extra cashier costs $1.09/hr but saves only ~$0.13/hr (Sun) or ~$0.08/hr (Fri) in wait cost, a net loss.
+    <div class="info-box blue" style="margin-top:1rem;text-align:left" id="verdictDetail">
+      <strong>Why?</strong> Loading...
     </div>
   </div>
 </section>
@@ -520,7 +480,6 @@ function mmS(lam, mu, s) {
   return { rho, P0, Lq, L, Wq_hr, W_hr, Wq_min: Wq_hr * 60, Wq_sec: Wq_hr * 3600, W_min: W_hr * 60, Pw };
 }
 
-// Step definitions for rendering
 const stepDefs = [
   ['Utilization (&rho;)', '&rho; = &lambda; / (s &times; &mu;)'],
   ['Empty Prob (P&#8320;)', 'P&#8320; = 1 / [&Sigma;(&lambda;/&mu;)<sup>n</sup>/n! + (&lambda;/&mu;)<sup>s</sup>/(s!(1-&rho;))]'],
@@ -590,6 +549,108 @@ function setFriday() {
   updateAll();
 }
 
+// ---- Dynamic Scenario Table ----
+function renderScenarioTable(lam, mu, s) {
+  const lamVals = [lam, Math.max(1, lam-2), Math.max(1, lam-1), lam+1, lam+2, lam+3];
+  const uniq = [...new Set(lamVals)].sort((a,b)=>a-b);
+  const headers = ['Metric', `<b>s=${s} &lambda;=${lam}</b>`];
+  const colClasses = ['', ' class="br"'];
+  const cols = [{s, lam}];
+  uniq.forEach(l => {
+    if (l === lam) return;
+    headers.push(`s=${s} &lambda;=${l}`);
+    colClasses.push('');
+    cols.push({s, lam: l});
+  });
+  headers.push(`s=1 &lambda;=${uniq[0]}`);
+  colClasses.push('');
+  cols.push({s: 1, lam: uniq[0]});
+
+  const metrics = [
+    ['Utilization (&rho;)', r => r.rho.toFixed(3)],
+    ['Empty Prob (P&#8320;)', r => r.P0.toFixed(3)],
+    ['Queue Length (Lq)', r => r.Lq.toFixed(3)],
+    ['System Length (L)', r => r.L.toFixed(3)],
+    ['Queue Time (Wq) min', r => r.Wq_min.toFixed(2)],
+    ['System Time (W) min', r => r.W_min.toFixed(2)],
+    ['Wait Prob (Pw)', r => r.Pw.toFixed(3)]
+  ];
+
+  let html = '<table><thead><tr>';
+  headers.forEach((h, i) => html += `<th${colClasses[i]||''}>${h}</th>`);
+  html += '</tr></thead><tbody>';
+
+  metrics.forEach(([name, fn]) => {
+    html += `<tr><td style="font-weight:600;text-align:left;padding-left:0.8rem">${name}</td>`;
+    cols.forEach((c, i) => {
+      const r = mmS(c.lam, mu, c.s);
+      html += `<td${colClasses[i]||''}>${r ? fn(r) : '!'}</td>`;
+    });
+    html += '</tr>';
+  });
+
+  html += '</tbody></table>';
+  document.getElementById('scenarioTableContainer').innerHTML = html;
+
+  // Insight
+  const rRef = mmS(lam, mu, s);
+  const r1 = mmS(uniq[0], mu, 1);
+  let insight = '';
+  if (rRef && r1) {
+    insight = s > 1
+      ? `&#9733; <b>Key Insight:</b> With s=${s}, queue stays under ${rRef.Lq.toFixed(1)} customers and wait under ${rRef.Wq_min < 1 ? rRef.Wq_sec.toFixed(0)+' sec' : rRef.Wq_min.toFixed(1)+' min'}. With s=1, queue hits ${r1.Lq.toFixed(1)} customers and wait jumps to ${r1.Wq_min.toFixed(1)} min.`
+      : `&#9733; <b>Key Insight:</b> With s=1, queue length = ${r1.Lq.toFixed(2)} customers, wait = ${r1.Wq_min.toFixed(1)} min. Consider adding a 2nd cashier.`;
+  }
+  document.getElementById('scenarioInsight').innerHTML = insight;
+}
+
+// ---- Dynamic Economic Tables ----
+function getTC(s, L, sc, wc) { return s * sc + L * wc; }
+
+function renderEconTable(lam, mu, sc, wc, containerId, optId) {
+  const rows = [];
+  let bestS = 1, bestTC = Infinity;
+  for (let s = 1; s <= 6; s++) {
+    const r = mmS(lam, mu, s);
+    if (!r) break;
+    const tc = getTC(s, r.L, sc, wc);
+    rows.push({ s, r, tc });
+    if (tc < bestTC) { bestTC = tc; bestS = s; }
+  }
+  let html = '<table><thead><tr><th>s</th><th>&rho;</th><th>Lq</th><th>Wq (min)</th><th>Server $</th><th>Wait $</th><th>Total $</th></tr></thead><tbody>';
+  rows.forEach(({ s, r, tc }) => {
+    html += `<tr${s === bestS?' class="br"':''}>`;
+    html += `<td>${s}</td>`;
+    html += `<td>${(r.rho*100).toFixed(1)}%</td>`;
+    html += `<td>${r.Lq.toFixed(2)}</td>`;
+    html += `<td>${r.Wq_min.toFixed(2)}</td>`;
+    html += `<td>$${(s*sc).toFixed(2)}</td>`;
+    html += `<td>$${(r.L*wc).toFixed(2)}</td>`;
+    html += `<td><strong>$${tc.toFixed(2)}</strong></td>`;
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  document.getElementById(containerId).innerHTML = html;
+
+  const rBest = rows.find(r => r.s === bestS);
+  const wqStr = rBest && rBest.r.Wq_min < 1 ? `${rBest.r.Wq_sec.toFixed(0)} sec` : `${rBest ? rBest.r.Wq_min.toFixed(1) : '?'} min`;
+  document.getElementById(optId).innerHTML = `<strong>&#9733; s=${bestS} Optimal: $${bestTC.toFixed(2)}/hr</strong> &mdash; Wait: ${wqStr}`;
+  return { bestS, bestTC };
+}
+
+function renderVerdict(sc, wc) {
+  const sun = renderEconTable(16.02, 20.45, sc, wc, 'econSun', 'econSunOpt');
+  const fri = renderEconTable(13.62, 20.00, sc, wc, 'econFri', 'econFriOpt');
+  const best = sun.bestS === fri.bestS ? sun.bestS : `Sun: s=${sun.bestS}, Fri: s=${fri.bestS}`;
+  document.getElementById('verdictOptimal').textContent = typeof best === 'number' ? `s = ${best}` : best;
+  document.getElementById('verdictDesc').textContent = typeof best === 'number'
+    ? `Optimal for both Sunday & Friday &bull; Lowest total cost at current costs`
+    : `Different optimal for each day at current costs`;
+  document.getElementById('verdictDetail').innerHTML = typeof best === 'number'
+    ? `<strong>Why s=${best}?</strong> At $${sc.toFixed(3)}/cashier and $${wc.toFixed(2)}/wait, s=${best} gives the lowest total cost across both datasets.`
+    : `<strong>Note:</strong> Sunday and Friday have different optima at current costs. Adjust rates to find a common optimum.`;
+}
+
 // Charts
 let costChart, waitChart;
 
@@ -619,8 +680,6 @@ function updateCharts(lam, mu, sc, wc) {
   });
 }
 
-function getTC(s, L, sc, wc) { return s * sc + L * wc; }
-
 function updateAll() {
   const lam = parseFloat(document.getElementById('lamIn').value) || 16;
   const mu = parseFloat(document.getElementById('muIn').value) || 20;
@@ -639,8 +698,19 @@ function updateAll() {
     ['kpUtil','kpLq','kpWq','kpCost'].forEach(id => document.getElementById(id).textContent = '!');
   }
 
-  renderSteps(16.02, 20.45, 2, 'stepsSun');
-  renderSteps(13.62, 20.00, 2, 'stepsFri');
+  // Section 3: Dynamic formula steps
+  document.getElementById('stepsTitleLeft').innerHTML = `&lambda;=${lam}, &mu;=${mu}, s=${s}`;
+  renderSteps(lam, mu, s, 'stepsLeft');
+  document.getElementById('stepsTitleRight').innerHTML = `&lambda;=${lam}, &mu;=${mu}, s=1`;
+  renderSteps(lam, mu, 1, 'stepsRight');
+
+  // Section 4: Dynamic scenario table
+  document.getElementById('scCurS').textContent = s;
+  document.getElementById('scCurLam').textContent = lam;
+  renderScenarioTable(lam, mu, s);
+
+  // Section 5: Dynamic economic tables + verdict
+  renderVerdict(sc, wc);
   updateCharts(lam, mu, sc, wc);
 }
 
