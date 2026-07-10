@@ -344,13 +344,13 @@ footer strong{color:#64748b}
         <div class="iw"><span>$</span><input type="number" id="ccIn" value="1.093" step="0.001" min="0"></div>
       </div>
       <div class="input-group">
-        <label>Waiting Cost ($/hr per customer)</label>
-        <div class="iw"><span>$</span><input type="number" id="wcIn" value="1" step="0.1" min="0"></div>
+        <label>Waiting Cost ($/hr per customer) <span style="font-weight:400;color:var(--g400)">(original: $4.55)</span></label>
+        <div class="iw"><span>$</span><input type="number" id="wcIn" value="4.55" step="0.05" min="0"></div>
       </div>
     </div>
     <div style="margin-top:0.75rem;display:flex;gap:0.5rem;flex-wrap:wrap">
-      <button onclick="setSunday()" style="background:var(--a);color:#fff;border:none;padding:0.4rem 1.2rem;border-radius:8px;font-weight:600;font-size:0.78rem;cursor:pointer">&larr; Sunday (&lambda;=16.02, &mu;=20.45)</button>
-      <button onclick="setFriday()" style="background:#3b82f6;color:#fff;border:none;padding:0.4rem 1.2rem;border-radius:8px;font-weight:600;font-size:0.78rem;cursor:pointer">&larr; Friday (&lambda;=13.62, &mu;=20.00)</button>
+      <button onclick="setSunday()" style="background:var(--a);color:#fff;border:none;padding:0.4rem 1.2rem;border-radius:8px;font-weight:600;font-size:0.78rem;cursor:pointer">&larr; Sunday (&lambda;=16.02, &mu;=20.45, Cw=$4.55)</button>
+      <button onclick="setFriday()" style="background:#3b82f6;color:#fff;border:none;padding:0.4rem 1.2rem;border-radius:8px;font-weight:600;font-size:0.78rem;cursor:pointer">&larr; Friday (&lambda;=13.62, &mu;=20.00, Cw=$4.55)</button>
     </div>
   </div>
 
@@ -537,7 +537,7 @@ function setSunday() {
   document.getElementById('muIn').value = 20.45;
   document.getElementById('sIn').value = 2;
   document.getElementById('ccIn').value = 1.093;
-  document.getElementById('wcIn').value = 1;
+  document.getElementById('wcIn').value = 4.55;
   updateAll();
 }
 function setFriday() {
@@ -545,7 +545,7 @@ function setFriday() {
   document.getElementById('muIn').value = 20.00;
   document.getElementById('sIn').value = 2;
   document.getElementById('ccIn').value = 1.093;
-  document.getElementById('wcIn').value = 1;
+  document.getElementById('wcIn').value = 4.55;
   updateAll();
 }
 
@@ -685,7 +685,7 @@ function updateAll() {
   const mu = parseFloat(document.getElementById('muIn').value) || 20;
   const s = parseInt(document.getElementById('sIn').value) || 2;
   const sc = parseFloat(document.getElementById('ccIn').value) || 1.093;
-  const wc = parseFloat(document.getElementById('wcIn').value) || 1;
+  const wc = parseFloat(document.getElementById('wcIn').value) || 4.55;
 
   const r = mmS(lam, mu, s);
   if (r) {
