@@ -345,7 +345,7 @@ footer strong{color:#64748b}
       </div>
       <div class="input-group">
         <label>Waiting Cost ($/hr per customer)</label>
-        <div class="iw"><span>$</span><input type="number" id="wcIn" value="5" step="0.5" min="0"></div>
+        <div class="iw"><span>$</span><input type="number" id="wcIn" value="1" step="0.1" min="0"></div>
       </div>
     </div>
     <div style="margin-top:0.75rem;display:flex;gap:0.5rem;flex-wrap:wrap">
@@ -445,14 +445,14 @@ footer strong{color:#64748b}
         <table>
           <thead><tr><th>s</th><th>&rho;</th><th>Lq</th><th>Wq (min)</th><th>Server $</th><th>Wait $</th><th>Total $</th></tr></thead>
           <tbody>
-            <tr><td>1</td><td>78.4%</td><td>2.83</td><td>10.61</td><td>$1.09</td><td>$18.08</td><td><strong>$19.17</strong></td></tr>
-            <tr class="br"><td>2</td><td>39.2%</td><td>0.14</td><td>0.53</td><td>$2.19</td><td>$4.62</td><td><strong>$6.81</strong></td></tr>
-            <tr><td>3</td><td>26.1%</td><td>0.02</td><td>0.07</td><td>$3.28</td><td>$4.00</td><td><strong>$7.28</strong></td></tr>
-            <tr><td>4</td><td>19.6%</td><td>0.00</td><td>0.01</td><td>$4.37</td><td>$3.93</td><td><strong>$8.30</strong></td></tr>
+            <tr><td>1</td><td>78.4%</td><td>2.83</td><td>10.61</td><td>$1.09</td><td>$3.62</td><td><strong>$4.71</strong></td></tr>
+            <tr class="br"><td>2</td><td>39.2%</td><td>0.14</td><td>0.53</td><td>$2.19</td><td>$0.93</td><td><strong>$3.12</strong></td></tr>
+            <tr><td>3</td><td>26.1%</td><td>0.02</td><td>0.07</td><td>$3.28</td><td>$0.80</td><td><strong>$4.08</strong></td></tr>
+            <tr><td>4</td><td>19.6%</td><td>0.00</td><td>0.01</td><td>$4.37</td><td>$0.79</td><td><strong>$5.16</strong></td></tr>
           </tbody>
         </table>
       </div>
-      <div class="info-box green" style="margin-top:0.5rem"><strong>&#9733; s=2 Optimal: $6.81/hr</strong> &mdash; Wait: 32 sec</div>
+      <div class="info-box green" style="margin-top:0.5rem"><strong>&#9733; s=2 Optimal: $3.12/hr</strong> &mdash; Wait: 32 sec</div>
     </div>
 
     <div class="card" style="border-left:4px solid #3b82f6">
@@ -461,14 +461,14 @@ footer strong{color:#64748b}
         <table>
           <thead><tr><th>s</th><th>&rho;</th><th>Lq</th><th>Wq (min)</th><th>Server $</th><th>Wait $</th><th>Total $</th></tr></thead>
           <tbody>
-            <tr><td>1</td><td>68.1%</td><td>1.46</td><td>6.42</td><td>$1.09</td><td>$10.67</td><td><strong>$11.77</strong></td></tr>
-            <tr class="br"><td>2</td><td>34.0%</td><td>0.09</td><td>0.39</td><td>$2.19</td><td>$3.85</td><td><strong>$6.04</strong></td></tr>
-            <tr><td>3</td><td>22.7%</td><td>0.01</td><td>0.04</td><td>$3.28</td><td>$3.46</td><td><strong>$6.73</strong></td></tr>
-            <tr><td>4</td><td>17.0%</td><td>0.00</td><td>0.01</td><td>$4.37</td><td>$3.41</td><td><strong>$7.78</strong></td></tr>
+            <tr><td>1</td><td>68.1%</td><td>1.46</td><td>6.42</td><td>$1.09</td><td>$2.14</td><td><strong>$3.23</strong></td></tr>
+            <tr class="br"><td>2</td><td>34.0%</td><td>0.09</td><td>0.39</td><td>$2.19</td><td>$0.77</td><td><strong>$2.96</strong></td></tr>
+            <tr><td>3</td><td>22.7%</td><td>0.01</td><td>0.04</td><td>$3.28</td><td>$0.69</td><td><strong>$3.97</strong></td></tr>
+            <tr><td>4</td><td>17.0%</td><td>0.00</td><td>0.01</td><td>$4.37</td><td>$0.68</td><td><strong>$5.05</strong></td></tr>
           </tbody>
         </table>
       </div>
-      <div class="info-box green" style="margin-top:0.5rem"><strong>&#9733; s=2 Optimal: $6.04/hr</strong> &mdash; Wait: 23 sec</div>
+      <div class="info-box green" style="margin-top:0.5rem"><strong>&#9733; s=2 Optimal: $2.96/hr</strong> &mdash; Wait: 23 sec</div>
     </div>
   </div>
 
@@ -489,7 +489,7 @@ footer strong{color:#64748b}
       <p>Optimal for both Sunday &amp; Friday &bull; Wait &lt; 1 minute &bull; Lowest total cost</p>
     </div>
     <div class="info-box blue" style="margin-top:1rem;text-align:left">
-      <strong>Why s=2?</strong> The 2nd cashier (+$1.09/hr) reduces waiting cost by <strong>$13.46/hr (Sun)</strong> and <strong>$6.82/hr (Fri)</strong> &mdash; a positive ROI. Beyond 2, each extra cashier costs $1.09/hr but saves only ~$0.47/hr (Sun) or ~$0.39/hr (Fri) in wait cost, a net loss.
+      <strong>Why s=2?</strong> The 2nd cashier (+$1.09/hr) reduces waiting cost by <strong>$2.69/hr (Sun)</strong> and <strong>$1.37/hr (Fri)</strong> &mdash; a positive ROI. Beyond 2, each extra cashier costs $1.09/hr but saves only ~$0.13/hr (Sun) or ~$0.08/hr (Fri) in wait cost, a net loss.
     </div>
   </div>
 </section>
@@ -578,6 +578,7 @@ function setSunday() {
   document.getElementById('muIn').value = 20.45;
   document.getElementById('sIn').value = 2;
   document.getElementById('ccIn').value = 1.093;
+  document.getElementById('wcIn').value = 1;
   updateAll();
 }
 function setFriday() {
@@ -585,6 +586,7 @@ function setFriday() {
   document.getElementById('muIn').value = 20.00;
   document.getElementById('sIn').value = 2;
   document.getElementById('ccIn').value = 1.093;
+  document.getElementById('wcIn').value = 1;
   updateAll();
 }
 
@@ -624,7 +626,7 @@ function updateAll() {
   const mu = parseFloat(document.getElementById('muIn').value) || 20;
   const s = parseInt(document.getElementById('sIn').value) || 2;
   const sc = parseFloat(document.getElementById('ccIn').value) || 1.093;
-  const wc = parseFloat(document.getElementById('wcIn').value) || 5;
+  const wc = parseFloat(document.getElementById('wcIn').value) || 1;
 
   const r = mmS(lam, mu, s);
   if (r) {
