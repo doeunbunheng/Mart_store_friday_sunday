@@ -416,7 +416,7 @@ footer strong{color:#64748b}
 
   <div class="two-c">
     <div class="card" style="border-left:4px solid var(--a)">
-      <div class="ct">&#9632; Sunday &mdash; Cost by # Cashiers (&lambda;=16.02, &mu;=20.45)</div>
+      <div class="ct">&#9632; Cost by # Cashiers (<span id="econTitle1">&lambda;=16.02, &mu;=20.45</span>)</div>
       <div class="tw">
         <div id="econSun"></div>
       </div>
@@ -424,7 +424,7 @@ footer strong{color:#64748b}
     </div>
 
     <div class="card" style="border-left:4px solid #3b82f6">
-      <div class="ct">&#9632; Friday &mdash; Cost by # Cashiers (&lambda;=13.62, &mu;=20.00)</div>
+      <div class="ct">&#9632; Cost by # Cashiers (<span id="econTitle2">&lambda;=13.62, &mu;=20.00</span>)</div>
       <div class="tw">
         <div id="econFri"></div>
       </div>
@@ -638,17 +638,13 @@ function renderEconTable(lam, mu, sc, wc, containerId, optId) {
   return { bestS, bestTC };
 }
 
-function renderVerdict(sc, wc) {
-  const sun = renderEconTable(16.02, 20.45, sc, wc, 'econSun', 'econSunOpt');
-  const fri = renderEconTable(13.62, 20.00, sc, wc, 'econFri', 'econFriOpt');
-  const best = sun.bestS === fri.bestS ? sun.bestS : `Sun: s=${sun.bestS}, Fri: s=${fri.bestS}`;
-  document.getElementById('verdictOptimal').textContent = typeof best === 'number' ? `s = ${best}` : best;
-  document.getElementById('verdictDesc').textContent = typeof best === 'number'
-    ? `Optimal for both Sunday & Friday &bull; Lowest total cost at current costs`
-    : `Different optimal for each day at current costs`;
-  document.getElementById('verdictDetail').innerHTML = typeof best === 'number'
-    ? `<strong>Why s=${best}?</strong> At $${sc.toFixed(3)}/cashier and $${wc.toFixed(2)}/wait, s=${best} gives the lowest total cost across both datasets.`
-    : `<strong>Note:</strong> Sunday and Friday have different optima at current costs. Adjust rates to find a common optimum.`;
+function renderVerdict(lam, mu, sc, wc) {
+  const cur = renderEconTable(lam, mu, sc, wc, 'econSun', 'econSunOpt');
+  const ref = renderEconTable(lam, mu, sc, wc, 'econFri', 'econFriOpt');
+  const best = cur.bestS;
+  document.getElementById('verdictOptimal').textContent = `s = ${best}`;
+  document.getElementById('verdictDesc').textContent = `Optimal at current inputs &bull; Lowest total cost $${cur.bestTC.toFixed(2)}/hr`;
+  document.getElementById('verdictDetail').innerHTML = `<strong>Why s=${best}?</strong> At $${sc.toFixed(3)}/cashier and $${wc.toFixed(2)}/wait, s=${best} minimizes total cost = Server $${(best*sc).toFixed(2)} + Wait $${(cur.bestTC - best*sc).toFixed(2)}.`;
 }
 
 // Charts
@@ -710,7 +706,9 @@ function updateAll() {
   renderScenarioTable(lam, mu, s);
 
   // Section 5: Dynamic economic tables + verdict
-  renderVerdict(sc, wc);
+  document.getElementById('econTitle1').innerHTML = `&lambda;=${lam}, &mu;=${mu}`;
+  document.getElementById('econTitle2').innerHTML = `&lambda;=${lam}, &mu;=${mu}`;
+  renderVerdict(lam, mu, sc, wc);
   updateCharts(lam, mu, sc, wc);
 }
 
